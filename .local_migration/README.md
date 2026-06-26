@@ -2656,7 +2656,104 @@ Core-файл `engine/modules/vote.php` не исправлялся вручну
 Перед применением проверить charset/version в официальном архиве dle14_2.zip и изменения шаблона 14.1 -> 14.2.
 ```
 
-## 46. Операционные заметки, которые нельзя терять
+## 46. Обновление статуса: DLE 14.2 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 14.1 до DLE 14.2.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle14_2.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 14.2
+install.php: charset = utf-8
+engine/inc/upgrade/14.1.php exists
+```
+
+Официальный changelog:
+
+```text
+14.1 -> 14.2: изменений в шаблонах не требуется.
+```
+
+Во время overlay 14.2 важно не переносить права/owner/group поверх runtime-директорий стенда. После того как `engine` получил права `700`, Apache/PHP не мог читать:
+
+```text
+/engine/classes/plugins.class.php
+```
+
+Это было исправлено нормализацией прав локального стенда:
+
+```text
+directories: 755
+files: 644
+engine/cache: writable for www-data
+engine/data: writable for upgrade
+```
+
+Это не изменение core-файлов, а только runtime-права локального Docker-стенда.
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"14.2"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 14.2
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/14.2-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Важный рубеж: начиная с локального состояния DLE 14.2 главная страница больше не падает на PHP 8.2.
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 14.2 UTF-8 -> DLE 14.3.
+Перед применением проверить charset/version в официальном архиве dle14_3.zip и изменения шаблона 14.2 -> 14.3.
+```
+
+## 47. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
