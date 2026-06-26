@@ -1290,3 +1290,76 @@ Fatal error: Array and string offset access syntax with curly braces is no longe
 ```
 
 Это ожидаемо и не блокирует следующий шаг, потому что официальный upgrade нужно начинать с проверенной DLE 10.5 UTF-8 на PHP 7.4.
+
+## 32. Обновление статуса: DLE 10.6 UTF-8 от 2026-06-26
+
+Официальный архив DLE 10.6 найден и распакован:
+
+```text
+source: Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\dle10.6_utf8.zip
+local:  .local_migration/dle_versions/10.6/
+```
+
+Инструкция `Documentation/upgrade.html` для 10.6 требует:
+
+```text
+1. Обновить файлы из /upload/, кроме /templates/.
+2. Если отсутствует templates/smartphone, скопировать его из дистрибутива.
+3. Запустить /upgrade/index.php.
+4. После успешного upgrade удалить /upgrade/ и install.php.
+5. Очистить кеш.
+```
+
+Файлы DLE 10.6 были наложены поверх `.local_migration/www_utf8` с исключениями:
+
+```text
+/templates/
+/engine/data/
+```
+
+`/templates/` исключен по официальной инструкции. `/engine/data/` сохранён, чтобы не потерять локальные конфиги подключения к Docker-БД.
+
+Для прохождения локального мастера upgrade был временно задан migration-only пароль пользователю `Drage` только в базе `corneroids_utf8`. Это изменение находится только в локальной Docker-БД/checkpoint и не публикуется в git.
+
+Upgrade `/upgrade/index.php` пройден через HTTP с авторизованной PHP session. Выполненные изменения:
+
+```text
+dle_logs.rating добавлен
+dle_comment_rating_log.rating добавлен
+dle_admin_sections.name изменён на VARCHAR(100)
+dle_post.date изменён на DATETIME DEFAULT '2000-01-01 00:00:00'
+dle_comments.date изменён на DATETIME DEFAULT '2000-01-01 00:00:00'
+engine/data/config.php: version_id = 10.6
+```
+
+После upgrade удалены:
+
+```text
+.local_migration/www_utf8/upgrade/
+.local_migration/www_utf8/install.php
+```
+
+Проверка:
+
+```text
+web74_utf8: http://localhost:8075
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Title: Всё для  игры Corneroids!
+Свежих PHP fatal/parse/warning в логах web74_utf8 не найдено.
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/10.6-utf8-php74-ok/
+  README.txt
+  db.sql
+  www_utf8.tar.gz
+```
+
+Следующий практический шаг:
+
+```text
+Начать официальный upgrade DLE 10.6 UTF-8 -> DLE 11.0.
+```
