@@ -2861,7 +2861,93 @@ install.php удалён
 Если DLE 15.x/16.0 отсутствуют, нельзя считать путь "по одной версии" выполненным без отдельного решения по недостающим архивам.
 ```
 
-## 48. Операционные заметки, которые нельзя терять
+## 48. Обновление статуса: DLE 15.0 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 14.3 до DLE 15.0.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle15_0.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 15.0
+install.php: charset = utf-8
+engine/inc/upgrade/14.3.php exists
+```
+
+Официальный changelog:
+
+```text
+14.3 -> 15.0: изменений в шаблонах не требуется.
+```
+
+Важный операционный нюанс: overlay и нормализацию прав нужно выполнять последовательно, не параллельно. Иначе `rsync` может последним восстановить права каталога `engine` как `700`, и Apache/PHP получит ошибку чтения:
+
+```text
+require_once(): Failed opening required '/var/www/html/engine/classes/plugins.class.php'
+```
+
+Для 15.0 это было исправлено повторной последовательной нормализацией прав локального стенда.
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"15.0"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 15.0
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/15.0-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 15.0 UTF-8 -> DLE 15.1.
+По changelog 15.0 -> 15.1 требуется адаптировать CSS для figure/figcaption в templates/Pisces/style/engine.css.
+```
+
+## 49. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
