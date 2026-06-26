@@ -1,0 +1,154 @@
+--- templates/Pisces/style/engine.css
++++ templates/Pisces/style/engine.css
+@@
+ .self_delete_link {
+ 	border: 0 none;
+ 	display: inline-block;
+ 	vertical-align: middle;
+ 	cursor: pointer;
+ 	padding: 12px 27px;
+ 	border-radius: 10px;
+ 	outline: none;
+ 	background-color: #f44336;
+ 	color: #fff;
+ 	text-shadow: 0 1px #333;
+ 	text-decoration: none !important;
+ 	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+ 	box-sizing: border-box;
+ 	transition: all ease .1s;
+ }
++
++.DLEPush {
++	z-index: 2001;
++	position: fixed;
++	right: 20px;
++	top: 20px
++}
++
++@keyframes DLEPush-show {
++	0% {
++		transform: translateY(100%);
++		opacity: 0;
++	}
++
++	100% {
++		transform: translateY(0);
++		opacity: 1;
++	}
++}
++
++.DLEPush-notification.wrapper {
++	animation-name: DLEPush-show;
++	animation-duration: 1s;
++	position: relative;
++	display: grid;
++	grid-template-columns: auto 1fr;
++	align-items: center;
++	color: #333;
++	margin-bottom: 10px;
++	width: 100%;
++	max-width: 400px;
++	box-shadow: 0 10px 15px rgb(0 0 0 / 20%);
++	background-color: #fff;
++	border-radius: 10px
++}
++
++.DLEPush-notification .DLEPush-icon {
++	grid-column: 1;
++	grid-row: 1 / span 2;
++	display: flex;
++	align-items: center;
++	justify-content: center;
++	color: #fff;
++	width: 45px;
++	height: 100%;
++	border-top-left-radius: 10px;
++	border-bottom-left-radius: 10px;
++	text-align: center;
++}
++
++.DLEPush-notification .DLEPush-icon svg {
++	scale: .8;
++}
++
++.DLEPush-notification .DLEPush-header {
++	font-weight: 500;
++	grid-column: 2;
++	grid-row: 1;
++	font-size: 1rem;
++	margin-left: 1rem;
++	margin-top: .5rem;
++}
++
++.DLEPush-notification .DLEPush-header:empty {
++	margin-top: 0;
++}
++
++.DLEPush-notification .DLEPush-message {
++	grid-column: 2;
++	grid-row: 2;
++	font-size: .875rem;
++	margin: 1rem;
++}
++
++.DLEPush-notification .DLEPush-message li,
++.DLEPush-notification .DLEPush-message ul {
++	list-style-type: none;
++	padding-left: 0;
++}
++
++.DLEPush-notification .DLEPush-close {
++	position: absolute;
++	top: 8px;
++	right: 10px;
++	font-weight: 300;
++	background: none;
++	border: 0;
++	font-size: 1.15rem;
++	cursor: pointer;
++	line-height: 1;
++	padding: 0;
++	color: inherit;
++	outline: 0;
++	opacity: 0.75;
++}
++
++@media only screen and (min-width: 601px) {
++	.DLEPush-notification.wrapper {
++		min-width: 400px;
++	}
++}
++
++.DLEPush-notification .DLEPush-close:hover {
++	opacity: 1;
++}
++
++.DLEPush-notification.wrapper.push-success {
++	background-color: #e0f2f1;
++}
++
++.DLEPush-notification.wrapper.push-success .DLEPush-icon {
++	background-color: #00897b;
++}
++
++.DLEPush-notification.wrapper.push-warning {
++	background-color: #FFF3E0;
++}
++
++.DLEPush-notification.wrapper.push-warning .DLEPush-icon {
++	background-color: #FF9800;
++}
++
++.DLEPush-notification.wrapper.push-error {
++	background-color: #FBE9E7;
++}
++
++.DLEPush-notification.wrapper.push-error .DLEPush-icon {
++	background-color: #FF5722;
++}
++
++input[type="text"].comments_author_field {
++	width: 100%;
++	margin-bottom: 10px;
++}
+ .uploadedfile .info {
