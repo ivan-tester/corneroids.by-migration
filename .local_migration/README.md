@@ -1026,6 +1026,47 @@ EasyLike
 5. Они могут конфликтовать с UTF-8.
 ```
 
+### 22.1. TODO: вернуть и адаптировать whoonline snippet
+
+На текущем мигрированном стенде DLE 15.1 в сайдбаре шаблона `Pisces` видна ошибка:
+
+```text
+File engine/modules/snippets/whoonline.php not found.
+```
+
+Точка подключения:
+
+```text
+templates/Pisces/main.tpl
+{include file="engine/modules/snippets/whoonline.php"}
+```
+
+Шаблон вывода при этом существует:
+
+```text
+templates/Pisces/whoonline.tpl
+```
+
+Старый исходник модуля найден в legacy-копиях:
+
+```text
+engine/modules/snippets/whoonline.php
+.local_migration/legacy/domains/corneroids.by/public_html/engine/modules/snippets/whoonline.php
+.local_migration/www/engine/modules/snippets/whoonline.php
+```
+
+Задача:
+
+```text
+1. Не копировать старый whoonline.php вслепую в текущую миграцию.
+2. После выхода на DLE 20.0 портировать модуль из legacy-версии.
+3. Адаптировать код под актуальные API DLE 20.0 и PHP 8.x.
+4. Проверить, что модуль не использует удалённые/старые глобальные переменные, SQL-паттерны и небезопасный вывод.
+5. Проверить отображение через templates/Pisces/whoonline.tpl.
+```
+
+Рекомендация по сроку выполнения: делать это после завершения core-migration до DLE 20.0, а не сейчас. Причина: модуль сторонний/кастомный, и при каждом дальнейшем overlay официальных файлов и смене DLE API его придётся перепроверять заново. До конца миграции достаточно держать ошибку как известный визуальный дефект или временно убрать include из локального шаблона отдельным patch, если он будет мешать просмотру страниц.
+
 Рекомендуемый подход:
 
 ```text
