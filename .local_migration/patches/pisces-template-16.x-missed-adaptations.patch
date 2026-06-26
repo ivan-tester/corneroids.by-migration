@@ -1,0 +1,75 @@
+--- templates/Pisces/addnews.tpl
++++ templates/Pisces/addnews.tpl
+@@
+-<h2 class="dpad heading">Добавить новость</h2>
++<h2 class="dpad heading">{header-title}</h2>
+--- templates/Pisces/userinfo.tpl
++++ templates/Pisces/userinfo.tpl
+@@
+ 					<tr>
+ 						<td class="label">Безопасность:</td>
+-						<td><div class="checkbox">{twofactor-auth}</div></td>
++						<td>{twofactor-auth}</td>
+ 					</tr>
+--- templates/Pisces/rss.tpl
++++ templates/Pisces/rss.tpl
+@@
+-[shortrss]<item>
+-<title>{title}</title>
+-<guid isPermaLink="true">{rsslink}</guid>
+-<link>{rsslink}</link>
+-<description>{short-story}</description>
+-<category>{category}</category>
+-<dc:creator>{rssauthor}</dc:creator>
+-<pubDate>{rssdate}</pubDate>
+-</item>[/shortrss]
+-[fullrss]<item>
+-<title>{title}</title>
+-<guid isPermaLink="true">{rsslink}</guid>
+-<link>{rsslink}</link>
+-<description><![CDATA[{short-story}]]></description>
+-<category><![CDATA[{category}]]></category>
+-<dc:creator>{rssauthor}</dc:creator>
+-<pubDate>{rssdate}</pubDate>
+-</item>[/fullrss]
+-[yandexrss]<item>
+-<title>{title}</title>
+-<link>{rsslink}</link>
+-<description>{short-story}</description>
+-<category>{category}</category>{images}
+-<pubDate>{rssdate}</pubDate>
+-<yandex:full-text>{full-story}</yandex:full-text>
+-</item>[/yandexrss]
++[rss]<item>
++<title>{title}</title>
++<guid isPermaLink="true">{rsslink}</guid>
++<link>{rsslink}</link>
++<dc:creator>{rssauthor}</dc:creator>
++<pubDate>{rssdate}</pubDate>
++<category>{category}</category>
++<description><![CDATA[{short-story}]]></description>
++</item>[/rss]
++
++[turbo]<item turbo="true">
++<turbo:extendedHtml>true</turbo:extendedHtml>
++<link>{rsslink}</link>
++<author>{rssauthor}</author>
++<category>{category}</category>
++<pubDate>{rssdate}</pubDate>
++<turbo:content><![CDATA[<header><h1>{title}</h1></header>{full-story}]]></turbo:content>
++</item>[/turbo]
++
++[dzen]<item>
++<title>{title}</title>
++<link>{rsslink}</link>
++<pdalink>{rsslink}</pdalink>
++<guid>{news-id}</guid>
++<pubDate>{rssdate}</pubDate>
++<category>native-yes</category>
++{images}
++<content:encoded><![CDATA[{full-story}]]></content:encoded>
++</item>[/dzen]
+--- /dev/null
++++ templates/Pisces/fastsearchresult.tpl
+@@
++<a href="{full-link}"><span class="searchheading">{title}</span><span>{short-story limit="150"}</span></a>

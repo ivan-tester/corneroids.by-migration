@@ -3425,9 +3425,53 @@ install.php удалён
 Перед применением проверить charset/version в официальном архиве dle17_0.zip и изменения шаблона 16.1 -> 17.0.
 ```
 
-## 54. Операционные заметки, которые нельзя терять
+## 54. Контрольный аудит шаблонов 16.x от 2026-06-27
 
-### 54.1. Соответствие файлов шаблона Pisces и Default changelog
+Перед переходом DLE 16.1 -> 17.0 был повторно проверен официальный `templates-changelog` и найдено, что в предыдущих шагах 15.3 -> 16.0 и 16.0 -> 16.1 были зафиксированы только CSS-изменения, но не все шаблонные изменения.
+
+Недостающие изменения адаптированы под активный шаблон `Pisces`:
+
+```text
+templates/Pisces/addnews.tpl
+templates/Pisces/rss.tpl
+templates/Pisces/fastsearchresult.tpl
+templates/Pisces/userinfo.tpl
+```
+
+Что сделано:
+
+```text
+1. addnews.tpl: заголовок "Добавить новость" заменён на {header-title}.
+2. rss.tpl: старые [shortrss]/[fullrss]/[yandexrss] заменены на актуальные [rss]/[turbo]/[dzen].
+3. fastsearchresult.tpl: добавлен файл результата быстрого поиска.
+4. userinfo.tpl: {twofactor-auth} оставлен в структуре Pisces, но без старой checkbox-обёртки.
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-16.x-missed-adaptations.patch
+```
+
+Проверка после правок:
+
+```text
+/                         200 ok
+/rss.xml                  200 ok
+/index.php?do=addnews     200 ok
+/index.php?do=feedback    200 ok
+```
+
+Следующий шаг:
+
+```text
+Продолжить upgrade DLE 16.1 UTF-8 -> DLE 17.0.
+Для 17.0 дополнительно адаптировать изменения changelog 16.1 -> 17.0.
+```
+
+## 55. Операционные заметки, которые нельзя терять
+
+### 55.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -3459,7 +3503,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 54.2. Personage, Drage и временные пароли
+### 55.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
