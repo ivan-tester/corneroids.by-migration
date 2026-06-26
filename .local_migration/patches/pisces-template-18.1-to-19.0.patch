@@ -1,0 +1,14 @@
+diff --git a/templates/Pisces/style/engine.css b/templates/Pisces/style/engine.css
+--- a/templates/Pisces/style/engine.css
++++ b/templates/Pisces/style/engine.css
+@@
+ .quote_link svg {
+ 	color: #6c838e;
+ 	vertical-align: middle;
+ }
++
++.clipboard-copy-link svg {
++	color: #6c838e;
++	vertical-align: middle;
++	margin-top: -3px;
++}
