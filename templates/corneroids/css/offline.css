@@ -1,0 +1,16 @@
+html, body{background-color:#d8e0e7; font-size:12px; font-family:Arial, Helvetica, sans-serif; margin:0; padding:0px; height:100%;}
+
+h1, h2, h3, h4, h5{ line-height: normal; color:#fff;}
+h1{ font-size: 1.8em; } h2 { font-size: 1.7em; } h3 { font-size: 1.30em; color:#fff; } h4 { font-size: 1.2em; } h5 { font-size: 1.1em; }
+a{color: #4a88ac; text-decoration: none;}
+a:hover{text-decoration: underline;}
+a img{border: 0 none;}
+input, textarea, select, button, body{ font: 12px/17px Arial, Tahoma, Helvetica, sans-serif;}
+input, textarea, select, button, a{ outline: none;}
+.weapper{margin:0 auto; width:929px; text-align:left; padding-top:120px;}
+.head{background:url(../images/offline/head.png) no-repeat; width:929px; height:145px;}
+.cont{background: url(../images/offline/bg_cont.png) repeat-y;width:611px;margin-left:159px;}
+.footer{background:url(../images/offline/footer.png) no-repeat; width:929px; height:151px; margin-top:-15px;float: center;}
+#reas{background:url(../images/offline/bg_reaspon.png) repeat; width:575px; height:65px; margin-left:14px;}
+.reason{padding-top:22px; padding-left:9px;}
+.logo_P {margin-top: 20px;}

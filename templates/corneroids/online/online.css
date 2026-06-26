@@ -1,0 +1,55 @@
+/* CSS Document */
+.online_out1 { /* ֲûגמה ג סענמךף*/
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+.online_out2 { /* ֲûגמה ג 2 סעמכבצא*/
+	float:left;
+	width:49%;
+	text-align: left;
+	overflow: hidden;
+}
+.online_out3 { /* ֲûגמה ג 3 סעמכבצא*/
+	float:left;
+	width:33%;
+	text-align: left;
+	overflow: hidden;
+}
+.online_out4 { /* ֲûגמה ג 4 סעמכבצא*/
+	float:left;
+	width:24%;
+	text-align: left;
+	overflow: hidden;
+}
+.online_out5 { /* ֲûגמה ג 5 סעמכבצמג*/
+	float:left;
+	width:19%;
+	text-align: left;
+	overflow: hidden;
+}
+
+.online_user {
+	overflow: hidden;
+}
+.online_user a{
+	text-decoration:none;
+}
+.online_user a:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#hintbox{-webkit-border-radius: 1em; -o-border-radius: 1em; -khtml-border-radius: 1em; -moz-border-radius: 1em; border-radius: 1em; width:170px;position:absolute;top:0;margin:10px 0 0 0;padding:3px 5px;font-size:10px;color:#701c1f;border:1px solid #a1a4a6;background-color:#e8ecef;visibility:hidden;z-index:1000;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=80)";filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);-moz-opacity:0.80;-khtml-opacity:0.80;opacity:0.80;}
+.hintanchor, .hintanchor a{
+	/*list-style:none;*/
+	/*display: block;
+	/*float: left;*/
+	/*text-decoration: none;
+	padding-left: 2px;
+	color: #0F0;
+	font-family: Tahoma, Geneva, Sans-serif;
+	font-size: 3.1em;
+	line-height: 24px;*/
+}

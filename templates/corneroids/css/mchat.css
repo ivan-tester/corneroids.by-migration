@@ -1,0 +1,11 @@
+#mchat-load-layer{width:160px;height:220px;background:#d8dadb;position:absolute;display:none;filter:alpha(opacity=50);-moz-opacity:.5;opacity:.5;}
+#mchat-smiles{position:absolute;width:180px;background:#fff3c4;border:1px solid #ffcc03;position:absolute;display:none;filter:alpha(opacity=50);-moz-opacity:.5;opacity:.8;padding:7px;}
+#mchat-bbcodes{position:absolute;display:none;filter:alpha(opacity=50);-moz-opacity:.5;opacity:.9;padding:7px;}
+#mchat-style a{color:#236f93;text-decoration:none;}
+
+
+hr {
+	border: 0px #d8d8d8 solid;
+	border-top-width: 1px;
+	height: 1px;
+}

@@ -1,0 +1,63 @@
+# Backups, database dumps, and archives
+*.sql
+*.sql.gz
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+*.bak
+*.backup
+core
+**/core
+db.sql.gz
+site.tar.gz
+backup/
+
+# Secrets and environment-specific configs
+.ssh/
+.env
+.env.*
+engine/data/dbconfig.php
+engine/data/config.php
+engine/data/socialconfig.php
+engine/data/videoconfig.php
+engine/inc/videoconfig.php
+upload_forum/control_center/configuration.php
+.local_migration/legacy/.ssh/
+.local_migration/legacy/
+.local_migration/www/engine/data/dbconfig.php
+.local_migration/www/engine/data/config.php
+.local_migration/www/engine/data/socialconfig.php
+.local_migration/www/engine/data/videoconfig.php
+.local_migration/www/engine/inc/videoconfig.php
+.local_migration/www/upload_forum/control_center/configuration.php
+
+# Generated local migration data
+.local_migration/mysql-init/*.sql
+.local_migration/www/
+.local_migration/dle_versions/
+.local_migration/dle_latest/
+.local_migration/checkpoints/
+
+# Runtime/cache/generated files
+.tmb/
+.quarantine/
+engine/cache/
+engine/cache/system/
+engine/cache/*.tmp
+upload_forum/cache/
+upload_forum/logs/
+uploads/
+.local_migration/www/engine/cache/
+.local_migration/www/upload_forum/cache/
+.local_migration/www/upload_forum/logs/
+.local_migration/www/uploads/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

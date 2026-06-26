@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>DLE Hash Domain v1.5 - Информация по установке</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<style type="text/css">
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: black;
+	background-color: white;
+	text-align: center;
+	font-size:11px;
+	/* part 1 of 2 centering hack */
+	}
+
+#main {
+	width: 800px; 
+	padding: 15px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-right: auto;
+	margin-left: auto; 	
+	background: #ffc;
+	border: 1px groove #333;
+	text-align:left; 
+	}
+	
+html>body #content {
+	width: 584px; /* ie5win fudge ends */
+	}
+	
+.fineprint {
+	border:1px solid black; 
+	padding:8px; 
+	background:#ffffff;
+	text-align:justify;
+}
+
+.text, li {
+	font-family:verdana, sans-serif;
+	font-size:11px;
+	margin-left:20px;
+	margin-right:20px;
+	line-height:140%;
+	text-align:justify;
+}
+
+.tiny {
+	font-family:verdana, sans-serif;
+	font-size:11px;
+	margin-bottom:10px;
+}
+li {
+    margin-bottom:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="main">
+    <div align="center"><h1><b>DLE Hash Domain v1.5</b></h1></div>           
+    <p align="center"><b>Краткая информация по установке</b></p>    
+    <div class="text">
+<p><b>1. Установка скрипта на сервер</b> </p>
+<ol type="1">
+<li>
+Для начала скопируйте все файлы из папки <b>upload</b> в данном архиве на ваш сервер. 
+</li>
+<li>
+Откройте файл language/Russian/website.lng: <br /><br />
+В самом вверху или в самом низу вставьте: =><br /><br />
+
+<b>	$lang_keygen = array(<br /><br />
+'title'	 	=>	'Генератор ключей DataLife Engine',<br />
+'err_01'	=>	'Введён неверный код безопасности.',<br />
+'err_02'	=>	'Пустое значение в поле для домена.',<br />
+'err_03'	=>	'Запрещенные символы в поле для домена.',<br />
+'err_04'	=>	'Вы не выбрали из списка версию DataLife Engine.',<br />
+'err_05'	=>	'<b>У разработчиков новый релиз</b>: DataLife Engine v.',<br />
+'err_06'	=>	'К сожалению, мы пока не генерируем ключи для новой версии DataLife Engine v.',<br /><br />
+);</b><br />
+</li>
+<li>
+Откройте файл engine/engine.php: <br /><br />
+Найдите =><br /><br />
+	
+<b>	case "pm" :<br />
+		include ENGINE_DIR . '/modules/pm.php';<br />
+		break;</b><br /><br />
+		
+Ниже вставьте =><br /><br />
+
+<b>	case "keygen" :<br />
+		include ENGINE_DIR . '/modules/keygen.php';<br />
+		break;</b><br />
+</li>
+
+<li>
+Найдите =><br /><br />
+	
+<b>elseif ($do == 'pm') $nam_e = $lang['title_pm'];</b><br /><br />
+		
+Ниже вставьте =><br /><br />
+
+<b>elseif ($do == 'keygen') $nam_e = $lang_keygen['title'];</b><br />
+</li>
+</ol>
+   
+<p>Установка завершена, переходим по адресу http://your site/index.php?do=keygen и радуемся.</p> 
+</div>
+<br />
+</body></html>

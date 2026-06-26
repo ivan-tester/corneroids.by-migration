@@ -1,0 +1,487 @@
+html,body{
+height:100%;
+margin:0px;
+padding: 0px;
+background: #FFFFFF;
+font-size: 11px;
+font-family: tahoma;
+}
+
+table{
+border:0px;
+border-collapse:collapse;
+}
+
+table td{
+padding:0px;
+}
+.category {
+	color: #727272;
+	font-size: 11px;
+	font-family: tahoma;
+	padding-top: 15px;
+}
+.category a {
+	color: #4b719e;
+	text-decoration:none;
+}
+.category a:hover {
+	text-decoration: underline;
+	}
+.slink {
+	color: #717171;
+	font-size: 11px;
+	font-family: tahoma;
+}
+.slink a:active,
+.slink a:visited,
+.slink a:link {
+	color: #E34000;
+	text-decoration:none;
+	}
+
+.slink a:hover {
+	color: #E34000;
+	text-decoration: underline;
+	}
+.copy {
+	color: #727272;
+	font-size: 11px;
+	font-family: tahoma;
+	padding: 5px;
+}
+.skin {
+	font-size: 11px;
+	font-family: tahoma;
+	padding-left: 60px;
+}
+.skin select {
+	font-size: 11px;
+	font-family: tahoma;
+}
+
+.copy a:active,
+.copy a:visited,
+.copy a:link {
+	color: #727272;
+	text-decoration:none;
+	}
+
+.copy a:hover {
+	color: #727272;
+	text-decoration: underline;
+	}
+.ltitle {
+	color: #E34000;
+	font-size: 18px;
+	font-family: tahoma;
+	font-weight: bold;
+	padding-left: 6px;
+	padding-top:  11px;
+}
+.stext {
+	color: #727272;
+	font-size: 11px;
+	font-family: tahoma;
+}
+.stext a:active,
+.stext a:visited,
+.stext a:link {
+	color: #E34000;
+	text-decoration:none;
+	}
+
+.stext a:hover {
+	color: #E34000;
+	text-decoration: underline;
+	}
+.ntitle {
+	color: #888888;
+	font-size: 18px;
+	font-family: tahoma;
+	font-weight: bold;
+	padding-left: 6px;
+	padding-top:  11px;
+}
+.ctitle {
+	color: #888888;
+	font-size: 12px;
+	font-family: tahoma;
+	padding-left: 6px;
+	padding-top:  18px;
+}
+.ctitle a {
+	color: #4b719e;
+	text-decoration:none;
+}
+.ctitle a:hover {
+	text-decoration: underline;
+	}
+.news {
+	FONT: 10pt Verdana; 
+	text-align:justify;
+}
+.news a {
+	color: #4b719e;
+	text-decoration:none;
+}
+.news a:hover {
+	text-decoration: underline;
+	}
+.userstop {
+	font-family:Tahoma;
+	font-size:11px;
+	color:#606D77;
+}
+.userstop thead {
+	font-family:Tahoma;
+	font-size:11px;
+    font-weight: bold;
+	color: rgb(71,117,165);
+}
+.userstop td {
+	padding:3px;
+}
+.userstop a {
+	color: #4b719e;
+	text-decoration:none;
+}
+.userstop a:hover {
+	text-decoration: underline;
+	}
+/*------------------------------------------------------------------*/
+/* Стили используемые в DataLife Engine     			            */
+/*------------------------------------------------------------------*/
+
+form {  PADDING-RIGHT: 0px; 
+	PADDING-LEFT: 0px; 
+	PADDING-BOTTOM: 0px; 
+	MARGIN: 0px; 
+	PADDING-TOP: 0px;
+}
+
+/* 
+ * ========================================
+ * Вывод архива 
+ * ========================================
+ */
+.archives {
+	vertical-align: top;
+	font-family:Tahoma;
+	font-size:11px;
+	margin-top:6px;
+	margin-left:20px;
+	margin-bottom:10px;
+}
+.archives a {
+	font-family:Tahoma;
+	font-size:11px;
+	color:#43637E;
+}
+/* 
+ * ========================================
+ * Цитата и скрытый текст
+ * ========================================
+ */
+ .quote {
+	color: #000000;
+	FONT: 10pt Verdana; 
+	text-align:justify;
+	background-color: lightyellow; 
+	border-width:1; 
+	border-color:rgb(190,190,190); 
+	border-style:dotted;
+	padding: 5px;
+	}
+/* 
+ * ========================================
+ * Teг CODE
+ * ========================================
+ */
+ .scriptcode {
+	color: #000000;
+	FONT: 8pt Verdana; 
+	text-align:left;
+	background-color: lightyellow; 
+	border-width:1; 
+	border-color:rgb(190,190,190); 
+	border-style:dotted;
+	padding: 5px;
+	}
+/* 
+ * ========================================
+ * Календарь 
+ * ========================================
+ */
+
+.weekday-active-v {
+	color: #4974a3;
+	font-family:tahoma;
+	 font-size:11px;
+}
+.day-active-v {
+	color: #4974a3;
+	font-family:tahoma;
+	 font-size:11px;
+}
+.calendar {
+	 font-family:verdana;
+	 font-size:11px
+}
+.calendar td, th {
+	 font-family:verdana;
+	 font-size:11px;
+	 text-decoration: none;
+	 padding: 3px;
+}
+
+.weekday {
+	color: #804040;
+	font-family:verdana;
+	font-size:11px;
+}
+.weekday-active {
+	color: #804040;
+	font-family:verdana;
+	font-size:11px;
+}
+.day-active {
+	color: #804040;
+	font-family:verdana;
+	font-size:11px;
+}
+.day-active a,
+.weekday-active a,
+.day-active-v a,
+.weekday-active-v a
+ {
+text-decoration: underline;
+}
+
+.monthlink {
+color: #4974a3;
+font-family:tahoma;
+font-size:11px;
+text-decoration: none;
+}
+
+/* 
+ * ========================================
+ * Рейтинг 
+ * ========================================
+ */
+
+.rating {
+	background: #FFF;
+	border: 1px solid #E0E0E0;
+	color: #666666;
+	font-family: Tahoma, helvetica, sans-serif;
+	vertical-align: middle;
+	font-size: 11px; 
+	vertical-align: middle;
+height:18px;
+}
+
+/* 
+ * ========================================
+ * BB коды
+ * ========================================
+ */ 
+.bbcodes {
+	background: #FFF;
+	border: 1px solid #E0E0E0;
+	color: #666666;
+	font-family: Verdana, Tahoma, helvetica, sans-serif;
+	padding: 2px;
+	vertical-align: middle;
+	font-size: 10px; 
+	vertical-align: middle;
+	margin:2px;
+	height: 21px;
+}
+
+/* 
+ * ========================================
+ * Дополнительные поля
+ * ========================================
+ */ 
+
+.xfields textarea {
+width:500px; height:90px; font-family:verdana; font-size:11px; border:1px solid #E0E0E0;
+}
+.xfields input {
+width:250px; height:18px; font-family:verdana; font-size:11px; border:1px solid #E0E0E0;
+}
+.xfields select {
+height:18px; font-family:verdana; font-size:11px; border:1px solid #E0E0E0;
+}
+
+/* 
+ * ========================================
+ * Персональные сообщения
+ * ========================================
+ */ 
+
+.pm_head {
+	FONT: 10pt Verdana; 
+}
+.pm_list {
+	color: #888888;
+	font-size: 11px;
+	font-family: tahoma;
+	}
+.pm_list a {
+	color: #4b719e;
+	font-size: 11px;
+	font-family: tahoma;
+}
+
+/* 
+ * ========================================
+ * Выпадающее меню
+ * ========================================
+ */ 
+
+#dropmenudiv{
+border:1px solid black;
+border-bottom-width: 0;
+font:normal 10px Verdana;
+background-color: #F4F4F4;
+line-height:18px;
+}
+
+#dropmenudiv a{
+width: 100%;
+display: block;
+text-indent: 3px;
+border-bottom: 1px solid black;
+padding: 1px 0;
+color: #4b719e;
+text-decoration: none;
+font-weight: bold;
+}
+
+#dropmenudiv a:hover{ /*hover background color*/
+background-color: #DEDEDE;
+}
+
+/* 
+ * ========================================
+ * Результаты поиска
+ * ========================================
+ */
+
+.sresult  {
+	text-align: justify;
+	font-family:verdana;
+    FONT-WEIGHT: normal;
+    LINE-HEIGHT: 16px;
+	font-size:12px;
+	color:#606D77;
+}
+
+/* 
+ * ========================================
+ * Опрос
+ * ========================================
+ */
+
+.vote  {
+	color: #717171;
+	font-size: 11px;
+	font-family: tahoma;
+}
+/*---Подсветка кода в теге [code]---*/
+pre code {
+  display: block; padding: 0.5em;
+  background: #f9fafa; 
+  border: 1px solid #dce7e7;
+  overflow:auto;
+  white-space: pre;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .doctype,
+pre .lisp .string,
+pre .javadoc {
+  color: #93a1a1;
+  font-style: italic;
+}
+
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .method,
+pre .addition,
+pre .css .tag,
+pre .lisp .title {
+  color: #859900;
+}
+
+pre .number,
+pre .command,
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula,
+pre .regexp,
+pre .hexcolor {
+  color: #2aa198;
+}
+
+pre .title,
+pre .localvars,
+pre .function .title,
+pre .chunk,
+pre .decorator,
+pre .builtin,
+pre .built_in,
+pre .lisp .title,
+pre .identifier,
+pre .title .keymethods,
+pre .id {
+  color: #268bd2;
+}
+
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
+  font-weight: bold;
+}
+
+pre .attribute,
+pre .variable,
+pre .instancevar,
+pre .lisp .body,
+pre .smalltalk .number,
+pre .constant,
+pre .class .title,
+pre .parent,
+pre .haskell .label {
+  color: #b58900;
+}
+
+pre .preprocessor,
+pre .pi,
+pre .shebang,
+pre .symbol,
+pre .diff .change,
+pre .special,
+pre .keymethods,
+pre .attr_selector,
+pre .important,
+pre .subst,
+pre .cdata {
+  color: #cb4b16;
+}
+
+pre .deletion {
+  color: #dc322f;
+}
+
+pre .tex .formula {
+  background: #eee8d5;
+}

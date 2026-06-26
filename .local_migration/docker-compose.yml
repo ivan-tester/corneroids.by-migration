@@ -1,0 +1,52 @@
+services:
+  web74:
+    build: ./docker/php74
+    ports:
+      - "8074:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db
+    extra_hosts:
+      - "corneroids.by:127.0.0.1"
+      - "www.corneroids.by:127.0.0.1"
+
+  web82:
+    build: ./docker/php82
+    ports:
+      - "8082:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db
+    extra_hosts:
+      - "corneroids.by:127.0.0.1"
+      - "www.corneroids.by:127.0.0.1"
+
+  db:
+    image: mariadb:10.11
+    ports:
+      - "3307:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: corneroids
+      MARIADB_USER: corneroids
+      MARIADB_PASSWORD: corneroids
+    command: ["--character-set-server=cp1251", "--collation-server=cp1251_general_ci"]
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
+
+volumes:
+  db_data:

@@ -1,0 +1,2 @@
+<div class="tlf2">{description}</div>																																																																																												<div style="display:none;">бесплатно <a href="http://newfilmak.org/">скачать фильмы</a> без регистрации <a href="http://newprogs.net/">скачать софт</a> или <a href="http://newtemplates.ru/dle97/">шаблоны dle 9.7</a></div>
+<div class="allcf"><div class="incf">{static}</div></div><div class="botf"> </div>

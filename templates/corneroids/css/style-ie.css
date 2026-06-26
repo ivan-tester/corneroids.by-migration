@@ -1,0 +1,44 @@
+/* Aleksey Skubaev
+
+askubaev@gmail.com
+icq - 322253350
+Разработка шаблонов для DLE и кроссбраузерная верстка
+------------------
+Дополнение. Фиксим глюки выкидышей майкрософта - IE6/IE7/IE8.
+*/
+
+.alert {
+	position: absolute;
+	padding: 5px;
+	background: #000;
+	color: #fff;
+	left: 0;
+	top: 30px;
+	z-index: 1000000;
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+	.alert:hover {
+		background: #bc9d67;
+		color: #000;
+	}
+	
+.form-text {
+		height: 18px;
+		padding: 0 20px 0 20px;
+	}
+	
+#topnav, #topnav li, #topnav li div {
+	z-index: 1000;
+}
+	
+.iem {
+	margin-left: -50px !important;
+}
+
+#styleSwitch li {
+	margin: 6px 6px 0 0 !important;
+}
+

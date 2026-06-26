@@ -1,0 +1,1 @@
+<div class="mainf2g">{title}</div><div class="ssc2g"><img src="{THEME}/img/wrn.png" alt="" style="padding-right:10px;" align="left" />{error}<div class="clear"> </div></div>
