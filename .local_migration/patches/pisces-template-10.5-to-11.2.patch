@@ -1,0 +1,253 @@
+--- .local_migration/.tmp/template-baseline-11.2/templates/Pisces/attachment.tpl	2026-06-26 12:43:17.000000000 +0300
++++ .local_migration/www_utf8/templates/Pisces/attachment.tpl	2026-06-26 17:33:09.513276796 +0300
+@@ -1,2 +1,2 @@
+-[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count]</span>[/allow-download]
+-[not-allow-download]<span class="attachment">У вас нет доступа к скачиванию файлов с нашего сервера</span>[/not-allow-download]
+\ No newline at end of file
++[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count][allow-online]<br />Посмотреть онлайн файл: <a href="{online-view-link}" target="_blank">{name}</a>[/allow-online]</span>[/allow-download]
++[not-allow-download]<span class="attachment">У вас нет доступа к скачиванию файлов с нашего сервера</span>[/not-allow-download]
+--- .local_migration/.tmp/template-baseline-11.2/templates/Pisces/userinfo.tpl	2026-06-26 12:43:17.000000000 +0300
++++ .local_migration/www_utf8/templates/Pisces/userinfo.tpl	2026-06-26 17:33:09.527943464 +0300
+@@ -44,11 +44,10 @@
+ 					<td class="label">Ваше Имя:</td>
+ 					<td><input type="text" name="fullname" value="{fullname}" class="f_input" /></td>
+ 				</tr>
+-				<tr>
+-					<td class="label">Ваш E-Mail:</td>
+-					<td><input type="text" name="email" value="{editmail}" class="f_input" /><br />
+-					<div class="checkbox">{hidemail}</div>
+-					<div class="checkbox"><input type="checkbox" id="subscribe" name="subscribe" value="1" /> <label for="subscribe">Отписаться от подписанных новостей</label></div></td>
++					<tr>
++						<td class="label">Ваш E-Mail:</td>
++						<td><input type="text" name="email" value="{editmail}" class="f_input" /><br />
++						<div class="checkbox">{hidemail}</div></td>
+ 				</tr>
+ 				<tr>
+ 					<td class="label">Место жительства:</td>
+@@ -98,13 +97,25 @@
+ 				<tr>
+ 					<td class="label">Подпись:</td>
+ 					<td><textarea name="signature" style="width:98%;" rows="5" class="f_textarea">{editsignature}</textarea></td>
+-				</tr>
+-				{xfields}
+-			</table>
++					</tr>
++					{xfields}
++					<tr>
++						<td class="label">Безопасность:</td>
++						<td><div class="checkbox">{twofactor-auth}</div></td>
++					</tr>
++					<tr>
++						<td class="label">Подписки:</td>
++						<td>
++							<div class="checkbox">{news-subscribe}</div>
++							<div class="checkbox">{comments-reply-subscribe}</div>
++							<div class="checkbox">{unsubscribe}</div>
++						</td>
++					</tr>
++				</table>
+ 			<div class="fieldsubmit">
+ 				<input class="fbutton" type="submit" name="submit" value="Отправить" />
+ 				<input name="submit" type="hidden" id="submit" value="submit" />
+ 			</div>
+ 		</div>
+ </div>
+-[/not-logged]
+\ No newline at end of file
++[/not-logged]
+--- /dev/null	2026-06-26 01:36:49.988373938 +0300
++++ .local_migration/www_utf8/templates/Pisces/categorymenu.tpl	2026-06-26 17:33:09.536786182 +0300
+@@ -0,0 +1,7 @@
++[root]<ul class="catmenu">[/root]
++[item]
++	<li><a href="{url}">{name} <span style="float: right;">{news-count}</span></a>
++	[sub-prefix]<ul>[/sub-prefix]{sub-item}[sub-suffix]</ul>[/sub-suffix]
++	</li>
++[/item]
++[root]</ul>[/root]
+--- .local_migration/.tmp/template-baseline-11.2/templates/Pisces/style/engine.css	2026-06-26 12:43:17.000000000 +0300
++++ .local_migration/www_utf8/templates/Pisces/style/engine.css	2026-06-26 17:33:09.557276800 +0300
+@@ -1366,4 +1366,181 @@
+ 
+ 	padding: 20px 1em !important;
+ 
+-}
+\ No newline at end of file
++}
++
++/* DLE 10.6-11.2 template compatibility */
++.emoji {
++	border: none;
++	vertical-align: middle;
++	width: 22px;
++	height: 22px;
++}
++
++.sort { list-style: none; padding: 0; margin: 0; }
++.sort > li, .sort { display: inline; }
++.sort > li { margin: 0 0 0 3%; }
++.sort > li a { color: #353535; }
++.sort > li.asc a, .sort > li.desc a { color: #3394e6; }
++.sort > li.asc a:after, .sort > li.desc a:after {
++	content: "";
++	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAsBAMAAACj90TiAAAAG1BMVEUAAAAzlOYzlOYzlOYzlOYzlOYzlOYzlOYzlOar6gzlAAAACHRSTlMAjesv90eHRuQt1XUAAABSSURBVBjTzdCxDQAhDENRSyzAEFdQ0zDB9axEgzw2DokEI1A9/S4OyAxADEcpPGlpFKWoSpEKp0Dlb6SvG2jY4Fka4tw4PqbEsDNTcb8gn/d4LPQHQDdjhblbAAAAAElFTkSuQmCC);
++	display: inline-block;
++	vertical-align: middle;
++	margin: -1px 0 0 .4em;
++	width: 6px; height: 11px;
++	-webkit-background-size: 6px auto; background-size: 6px auto;
++}
++.sort > li.asc a:after { background-position: 0 -11px; }
++
++.xfieldsrow {
++	padding-top: 5px;
++	clear: both;
++}
++.xfieldscolleft {
++	float: left;
++	width: 30%;
++}
++.xfieldscolright {
++	float: left;
++	width: 70%;
++}
++.file-box {
++	width: 95%;
++	max-width: 437px;
++	border: 1px solid #B3B3B3;
++	-moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
++	background-color: #F5F5F5;
++	padding: 10px;
++	margin-top: 10px;
++}
++.qq-uploader { position: relative; width: 100%; }
++.qq-upload-button {
++	display: inline-block;
++	padding: 4px 10px;
++	margin-top: 5px;
++	font: bold 11px/1.5em Verdana;
++	color: #000;
++	border: 1px solid #CACACA;
++	cursor: pointer;
++}
++.qq-upload-drop-area {
++	position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;
++	max-width: 437px;
++	background: #FF9797; text-align: center;
++}
++.qq-upload-drop-area span {
++	display: block; position: absolute; top: 50%; width: 100%; margin-top: -8px; font-size: 16px;
++}
++.qq-upload-drop-area-active { background: #FF7171; }
++.uploadedfile {
++	width: 115px;
++	height: 130px;
++	margin: 10px 5px 5px 5px;
++	border: 1px solid #B3B3B3;
++	box-shadow: 0 1px 4px rgba(0,0,0,0.3);
++	-moz-box-shadow: 0 1px 4px rgba(0,0,0,0.3);
++	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.3);
++	text-align: center;
++	background: #fff;
++}
++.uploadedfile .uploadimage {
++	margin-top: 5px;
++	width: 115px;
++	height: 90px;
++	display: table-cell;
++	text-align: center;
++	vertical-align: middle;
++}
++.uploadedfile .info {
++	text-align: left;
++	white-space: nowrap;
++	margin: 0 5px;
++	overflow: hidden;
++}
++.progress {
++	overflow: hidden;
++	margin-top: 10px;
++	margin-bottom: 10px;
++	height: 10px;
++	border-radius: 8px;
++	background: #eee;
++	-webkit-box-shadow: 0 1px 0 white, 0 0 0 1px rgba(0,0,0,0.1) inset, 0 1px 4px rgba(0,0,0,0.2) inset;
++	box-shadow: 0 1px 0 white, 0 0 0 1px rgba(0,0,0,0.1) inset, 0 1px 4px rgba(0,0,0,0.2) inset;
++}
++.progress .progress-bar {
++	float: left;
++	width: 0%;
++	font-size: 12px;
++	line-height: 20px;
++	color: white;
++	text-align: center;
++	background-color: #428bca;
++	-webkit-transition: width 0.6s ease;
++	transition: width 0.6s ease;
++	border-radius: 8px;
++	box-shadow: none;
++	height: 8px;
++}
++.progress-bar span {
++	position: absolute;
++	width: 1px;
++	height: 1px;
++	margin: -1px;
++	padding: 0;
++	overflow: hidden;
++	clip: rect(0 0 0 0);
++	border: 0;
++}
++.progress-blue {
++	background-image: -webkit-linear-gradient(top, #9bcff5 0%, #6db9f0 100%);
++	background-image: -moz-linear-gradient(top, #9bcff5 0%, #6db9f0 100%);
++	background-image: linear-gradient(to bottom, #9bcff5 0%, #6db9f0 100%);
++	background-repeat: repeat-x;
++	border: 1px solid #55aeee;
++}
++
++.xfieldimagegallery {
++	margin: 0;
++	padding: 0;
++	list-style: none;
++	clear: both;
++}
++.xfieldimagegallery li {
++	list-style: none;
++	margin: 0;
++	padding: 0;
++}
++.xfieldimagegallery li img {
++	float: left;
++	margin-right: 5px;
++	border: 5px solid #fff;
++	width: 100px;
++	height: 100px;
++	transition: box-shadow 0.5s ease;
++}
++.xfieldimagegallery li img:hover {
++	box-shadow: 0 0 7px rgba(0,0,0,0.4);
++}
++.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
++	cursor: not-allowed;
++	pointer-events: none;
++	opacity: 0.65;
++	filter: alpha(opacity=65);
++	-webkit-box-shadow: none;
++	box-shadow: none;
++}
++
++.dle-captcha { position: relative; }
++.dle-captcha:after { clear: both; display: block; content: ""; }
++.dle-captcha > a { float: left; margin-right: 5px; }
++.dle-captcha img {
++	position: relative;
++	display: block;
++	width: 130px; height: 46px;
++	-webkit-transition: all ease .2s; transition: all ease .2s;
++}
++.dle-captcha > input { float: left; width: 130px; }
++.xfieldsnote {
++	color: #838383;
++	font-size: .9em;
++}

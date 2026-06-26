@@ -1659,3 +1659,70 @@ Array and string offset access syntax with curly braces is deprecated
 `templates.class.php` в `.local_migration/www_utf8` совпадает с оригинальным файлом официального DLE 11.2 UTF-8 архива. Вручную ядро не править; это предупреждение нужно закрывать следующим официальным upgrade или переходом на версию, где DLE уже исправил этот синтаксис.
 
 `/sitemap.xml` сейчас отдаёт 404. Это не PHP fatal и не ошибка миграции БД, но перед финальным переносом нужно отдельно проверить генерацию sitemap/ЧПУ в актуальной финальной версии DLE.
+
+## 36. Адаптация шаблона Pisces под DLE 10.5 -> 11.2 от 2026-06-26
+
+Источник требований:
+
+```text
+https://dle-news.ru/templates-changelog.html
+разделы "Изменения в шаблонах" для переходов 10.5 -> 10.6 -> 11.0 -> 11.1 -> 11.2
+```
+
+Активный шаблон сайта:
+
+```text
+.local_migration/www_utf8/templates/Pisces
+```
+
+Применённые изменения в рабочей UTF-8 копии шаблона:
+
+```text
+templates/Pisces/style/engine.css
+  добавлен блок DLE 10.6-11.2 template compatibility:
+  .emoji, .sort, .xfieldsrow, .xfieldscolleft, .xfieldscolright,
+  .file-box, .qq-uploader, .qq-upload-*, .uploadedfile,
+  .progress, .progress-bar, .progress-blue,
+  .xfieldimagegallery, .btn.disabled, .dle-captcha, .xfieldsnote
+
+templates/Pisces/attachment.tpl
+  добавлен [allow-online] с {online-view-link} внутри существующей разметки Pisces
+
+templates/Pisces/userinfo.tpl
+  старый ручной checkbox name="subscribe" удалён из строки email
+  добавлены теги DLE 11.x:
+  {twofactor-auth}
+  {news-subscribe}
+  {comments-reply-subscribe}
+  {unsubscribe}
+
+templates/Pisces/categorymenu.tpl
+  создан файл для нового DLE 11.2 category menu
+```
+
+`main.tpl` намеренно не менялся. Официальный changelog говорит добавлять `{catmenu}` только при необходимости вывода меню категорий. У Pisces уже есть собственная навигация, поэтому автоматическая вставка `{catmenu}` могла бы изменить/сломать макет. Файл `categorymenu.tpl` создан, и тег можно будет разместить отдельно после решения по дизайну.
+
+BB-редактор отдельно не переписывался: блок `/*---BB Редактор---*/` в Pisces уже соответствует структуре Default 11.2 и содержит актуальные `.bb-pane`, `.bb-btn`, `.bb-editor textarea`.
+
+Воспроизводимый patch по этим изменениям сохранён в Git:
+
+```text
+.local_migration/patches/pisces-template-10.5-to-11.2.patch
+```
+
+Важно: рабочая копия `.local_migration/www_utf8` не трекается Git напрямую, чтобы не загружать локальные артефакты миграции, дампы и потенциальные секреты. Поэтому в Git фиксируется README + patch-файл с изменениями шаблона.
+
+Проверка после правок на `web74_utf8`:
+
+```text
+/                                             200
+/index.php                                    200
+/6-ustanovka.html                             200
+/news/                                        200
+/plugins/                                     200
+/index.php?do=feedback                        200
+/index.php?subaction=userinfo&user=Personage  200
+/templates/Pisces/style/engine.css            200
+```
+
+В HTML этих ответов не найдено `fatal error`, `parse error`, `warning`, `notice`, `deprecated`. Свежие логи `web74_utf8` после запросов не содержат новых PHP fatal/parse/warning/notice/deprecated/error; видны только стартовые Apache notice.
