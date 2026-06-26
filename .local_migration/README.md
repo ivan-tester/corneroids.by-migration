@@ -655,7 +655,7 @@ dle20_0.zip
 
 ## 12. Запуск локального стенда
 
-После установки Docker:
+Docker уже установлен в WSL Ubuntu. Запуск стенда:
 
 ```bash
 cd /home/ivandechenko/dev/corneroids.by/.local_migration
@@ -1043,12 +1043,12 @@ define ("DBUSER", "<production-db-user>");
 
 ## 24. Что требуется от пользователя сейчас
 
-На текущем этапе Docker уже установлен, cp1251 baseline и UTF-8 baseline проверены локально. От пользователя сейчас требуется только то, что нельзя безопасно сделать без доступа к внешним данным или интерактивному окружению:
+На текущем этапе Docker установлен, cp1251 baseline, UTF-8 baseline и upgrade до DLE 10.6 проверены локально. От пользователя сейчас требуется только то, что нельзя безопасно сделать без доступа к внешним данным или интерактивному окружению:
 
 ```text
 1. Если нужен доступ через http://corneroids.by:8074/8075 в браузере Windows, добавить hosts-записи вручную.
-2. Скопировать или распаковать найденные архивы DLE 10.5-20.0 из Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\ в .local_migration/dle_versions/.
-3. Подтвердить, что можно начинать первый официальный upgrade: DLE 10.5 UTF-8 -> DLE 10.6 UTF-8.
+2. По мере прохождения следующих шагов распаковывать официальные архивы DLE из Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\ в .local_migration/dle_versions/.
+3. Подтвердить, что можно начинать следующий официальный upgrade: DLE 10.6 UTF-8 -> DLE 11.0.
 ```
 
 ## 25. Команды для запуска стенда
@@ -1152,7 +1152,7 @@ http://localhost:8081
 Следующий практический шаг:
 
 ```text
-Начать официальный upgrade DLE 10.5 UTF-8 -> DLE 10.6 UTF-8.
+Начать официальный upgrade DLE 10.6 UTF-8 -> DLE 11.0.
 ```
 
 ## 30. Обновление статуса от 2026-06-26
@@ -1348,6 +1348,40 @@ Content-Type: text/html; charset=utf-8
 Title: Всё для  игры Corneroids!
 Свежих PHP fatal/parse/warning в логах web74_utf8 не найдено.
 ```
+
+После дополнительной проверки страниц `/rss.xml` и `/engine/opensearch.php` на PHP 7.4 был найден `Deprecated` из-за старого синтаксиса доступа к символу строки:
+
+```text
+engine/classes/templates.class.php
+$url['path']{0}
+```
+
+В текущей локальной UTF-8 копии это исправлено на PHP 7.4/8 совместимый синтаксис:
+
+```text
+$url['path'][0]
+```
+
+После исправления повторно проверены страницы:
+
+```text
+/                            200
+/index.php                   200
+/6-ustanovka.html            200
+/5-otkrytie.html             200
+/7-tekstura.html             200
+/news/                       200
+/help/                       200
+/plugins/                    200
+/index.php?do=feedback       200
+/index.php?do=lastcomments   200
+/admin.php                   200
+/rss.xml                     200
+/sitemap.xml                 200
+/engine/opensearch.php       200
+```
+
+Скан сохранённых ответов по `Fatal error`, `Parse error`, `Warning`, `Notice`, `Deprecated`, `MySQL Error`, `Database Error` ничего не нашёл. Свежие логи `web74_utf8` после проверки также не содержали fatal/parse/warning/notice/deprecated/error.
 
 Создан локальный checkpoint:
 
