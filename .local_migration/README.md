@@ -2545,7 +2545,118 @@ PHP 8.2 ошибка изменилась относительно 13.3: теп�
 Перед применением проверить charset/version в официальном архиве dle14_1.zip и изменения шаблона 14.0 -> 14.1.
 ```
 
-## 45. Операционные заметки, которые нельзя терять
+## 45. Обновление статуса: DLE 14.1 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 14.0 до DLE 14.1.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle14_1.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 14.1
+install.php: charset = utf-8
+engine/inc/upgrade/14.0.php exists
+```
+
+Шаблонный changelog для Default template на переходе 14.0 -> 14.1 требует добавить/обновить:
+
+```text
+print.tpl
+static_print.tpl
+```
+
+В `Pisces` эти файлы уже существовали, но были старого формата: XHTML/table layout и подключение старых JS. Для печатных страниц они заменены актуальными файлами из официального `templates/Default/` DLE 14.1:
+
+```text
+templates/Pisces/print.tpl
+templates/Pisces/static_print.tpl
+```
+
+Это осознанная адаптация: основная верстка сайта не затронута, изменение касается только print-версий.
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-14.0-to-14.1.patch
+```
+
+Во время первого захода в upgrade DLE 14.1 показал предварительную проверку прав:
+
+```text
+/engine/cache/
+/engine/cache/system/
+```
+
+После runtime-проверки из контейнера `web74_utf8` директории были доступны на запись. Повторная загрузка `admin.php?mod=upgrade&action=dbupgrade&to=14.1` отдала нормальную страницу upgrade:
+
+```text
+actualversion = 14.1
+versions = ['14.0','14.1']
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"14.1"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 14.1
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/14.1-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 PHP_TEXT
+Fatal error: Uncaught ValueError: array_rand(): Argument #1 ($array) cannot be empty in /var/www/html/engine/modules/vote.php:80
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Core-файл `engine/modules/vote.php` не исправлялся вручную.
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 14.1 UTF-8 -> DLE 14.2.
+Перед применением проверить charset/version в официальном архиве dle14_2.zip и изменения шаблона 14.1 -> 14.2.
+```
+
+## 46. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 

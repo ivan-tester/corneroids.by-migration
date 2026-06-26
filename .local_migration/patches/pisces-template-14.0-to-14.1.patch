@@ -1,0 +1,114 @@
+--- templates/Pisces/print.tpl
++++ templates/Pisces/print.tpl
+@@
+-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+-<html xmlns="http://www.w3.org/1999/xhtml">
++<!DOCTYPE html>
++<html>
+ <head>
+-<meta content="text/html; charset={charset}" http-equiv=Content-Type>
+-<style>
+-body,td { font-family: verdana, arial, sans-serif; color: #666; font-size: 80%; }
+-h1,h2,h3,h4 { font-family: verdana, arial, sans-serif; color: #666; font-size: 100%; margin: 0px; }
+-img {border:0}
+-</style>
+-<title>DataLife Engine > Версия для печати > {title}</title>
+-<script type="text/javascript" src="/engine/classes/js/jquery.js"></script>
+-<script type="text/javascript" src="/engine/classes/js/jqueryui.js"></script>
+-<script type="text/javascript" src="/engine/classes/js/dle_js.js"></script>
++	<meta charset="{charset}">
++	<style>
++		body { margin: 4% 8%; font: 300 18px/1.5 Georgia, "Times New Roman", arial, sans-serif; background-color: #fff; color: #000; }
++		h1,h2,h3,h4,h5 { margin: 2em 0 .6em 0; letter-spacing: -0.01em; line-height: normal; font-weight: bold; text-rendering: optimizeLegibility; }
++		h1 { font-size: 24px; }
++		h2 { font-size: 22px; }
++		h3 { font-size: 20px; }
++		h4 { font-size: 18px; }
++		h5 { font-size: 16px; }
++		img { border:0; }
++		.top, .back, .meta { font-style: italic; font-size: .8em; }
++		.meta { color: #b1b1b1; margin: 1em 0 3em 0; }
++	</style>
++	<title>DataLife Engine > Версия для печати > {title}</title>
++	<link rel="canonical" href="{full-link}">
+ </head>
+-<body bgcolor="#ffffff" text="#000000">
+-<table border="0" width="100%" cellspacing="1" cellpadding="3">
+-<tr>
+-<td width="100%">
+-<a href="/">Главная</a> > {category} > [full-link]{title}[/full-link]
+-<hr><h1>{title}</h1><br /><small>{date}. Разместил: {author}</small></td>
+-</tr>
+-<tr>
+-<td width="100%">
+-{full-story}
+-<hr>
+-<a href="javascript:history.go(-1)">Вернуться назад</a>
+-</td>
+-</tr>
+-</table>
++<body>
++	<div class="top"><a href="/">DataLife Engine</a> / [full-link]{title}[/full-link]</div>
++	<h1 class="title">{title}</h1>
++	<div class="text">
++	{full-story}
++	</div>
++	<div class="meta">{date}</div>
++	<a class="back" href="javascript:history.go(-1)">Вернуться назад</a>
+ </body>
+ </html>
+--- templates/Pisces/static_print.tpl
++++ templates/Pisces/static_print.tpl
+@@
++<!DOCTYPE html>
+ <html>
+ <head>
+-<meta content="text/html; charset={charset}" http-equiv=Content-Type>
+-<script type="text/javascript" src="/engine/classes/js/jquery.js"></script>
+-<script type="text/javascript" src="/engine/classes/js/jqueryui.js"></script>
+-<script type="text/javascript" src="/engine/classes/js/dle_js.js"></script>
+-<style>
+-body,td { font-family: verdana, arial, sans-serif; color: #666; font-size: 80%; }
+-h1,h2,h3,h4 { font-family: verdana, arial, sans-serif; color: #666; font-size: 100%; margin: 0px; }
+-</style>
+-<title>DataLife Engine > Версия для печати > {description}</title>
++	<meta charset="{charset}">
++	<style>
++		body { margin: 4% 8%; font: 300 18px/1.5 Georgia, "Times New Roman", arial, sans-serif; background-color: #fff; color: #000; }
++		h1,h2,h3,h4,h5 { margin: 2em 0 .6em 0; letter-spacing: -0.01em; line-height: normal; font-weight: bold; text-rendering: optimizeLegibility; }
++		h1 { font-size: 24px; }
++		h2 { font-size: 22px; }
++		h3 { font-size: 20px; }
++		h4 { font-size: 18px; }
++		h5 { font-size: 16px; }
++		img { border:0; }
++		.top, .back, .meta { font-style: italic; font-size: .8em; }
++		.meta { color: #b1b1b1; margin: 1em 0 3em 0; }
++	</style>
++	<title>DataLife Engine > Версия для печати > {description}</title>
+ </head>
+-<body bgcolor="#ffffff" text="#000000">
+-<table border="0" width="100%" cellspacing="1" cellpadding="3">
+-<tr>
+-<td width="100%">
+-<a href="/">Главная</a> > {description}
+-<hr></td>
+-</tr>
+-<tr>
+-<td width="100%">
+-{static}
+-<hr>
+-<a href="javascript:history.go(-1)">Вернуться назад</a>
+-</td>
+-</tr>
+-</table>
++<body>
++	<div class="top"><a href="/">DataLife Engine</a> / {description}</div>
++	<h1 class="title">{description}</h1>
++	<div class="text">
++	{static}
++	</div>
++	<div class="meta">{date}</div>
++	<a class="back" href="javascript:history.go(-1)">Вернуться назад</a>
+ </body>
+ </html>
