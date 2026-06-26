@@ -2947,7 +2947,93 @@ install.php удалён
 По changelog 15.0 -> 15.1 требуется адаптировать CSS для figure/figcaption в templates/Pisces/style/engine.css.
 ```
 
-## 49. Операционные заметки, которые нельзя терять
+## 49. Обновление статуса: DLE 15.1 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 15.0 до DLE 15.1.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle15_1.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 15.1
+install.php: charset = utf-8
+engine/inc/upgrade/15.0.php exists
+```
+
+Официальный changelog для Default template на переходе 15.0 -> 15.1 требует добавить CSS для `figure`/`figcaption`.
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-15.0-to-15.1.patch
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"15.1"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 15.1
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/15.1-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 15.1 UTF-8 -> DLE 15.2.
+По changelog 15.1 -> 15.2 изменений в шаблонах не требуется.
+```
+
+## 50. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
