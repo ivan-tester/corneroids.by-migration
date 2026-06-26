@@ -3074,7 +3074,85 @@ install.php удалён
 По changelog 15.1 -> 15.2 изменений в шаблонах не требуется.
 ```
 
-## 50. Операционные заметки, которые нельзя терять
+## 50. Обновление статуса: DLE 15.2 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 15.1 до DLE 15.2.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle15_2.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 15.2
+install.php: charset = utf-8
+engine/inc/upgrade/15.1.php exists
+```
+
+Официальный changelog:
+
+```text
+15.1 -> 15.2: изменений в шаблонах не требуется.
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"15.2"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 15.2
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/15.2-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 15.2 UTF-8 -> DLE 15.3.
+По changelog 15.2 -> 15.3 требуется адаптировать шаблонные изменения под Pisces.
+```
+
+## 51. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
