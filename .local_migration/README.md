@@ -1465,11 +1465,128 @@ $dle_version = "11.1";
 $distr_charset = "windows-1251";
 ```
 
-Блокер:
+Блокер был актуален до загрузки UTF-8 архивов в OneDrive. Позже пользователь загрузил нужные архивы:
 
 ```text
-Для продолжения строгого маршрута 10.6 -> 11.0 -> 11.1 -> 11.2 нужны официальные UTF-8 дистрибутивы DLE 11.0 и DLE 11.1
-или явное подтверждение, что можно пропустить эти windows-1251-only архивы и перейти с 10.6 сразу на 11.2_utf8.
+D:\OneDrive\OneDrive - EPAM\Моё\dev\dle11.0_utf8.zip
+D:\OneDrive\OneDrive - EPAM\Моё\dev\dle11.1_utf8.zip
+D:\OneDrive\OneDrive - EPAM\Моё\dev\dle11.2_utf8.zip
 ```
 
-Без этого подтверждения следующий upgrade не выполнять.
+Эти архивы проверены: в `upload/upgrade/index.php` у всех указано `$distr_charset = "utf-8"`.
+
+## 34. Обновление статуса: DLE 11.0, 11.1, 11.2 UTF-8 от 2026-06-26
+
+Пройден строгий маршрут:
+
+```text
+DLE 10.6 UTF-8 -> DLE 11.0 UTF-8 -> DLE 11.1 UTF-8 -> DLE 11.2 UTF-8
+```
+
+Для каждого шага использовались оригинальные файлы официального UTF-8 дистрибутива. Файлы ядра вручную не правились. При наложении файлов сохранялись:
+
+```text
+/templates/
+/engine/data/
+```
+
+### DLE 11.0
+
+Архив:
+
+```text
+.local_migration/dle_versions/11.0_utf8/dle11.0_utf8.zip
+```
+
+Upgrade `/upgrade/index.php` успешно завершён. Проверено:
+
+```text
+engine/data/config.php: version_id = 11.0
+dle_xfsearch создана
+dle_social_login.waitlogin добавлен
+dle_links.targetblank добавлен
+dle_usergroups.force_reg добавлен
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/11.0-utf8-php74-ok/
+```
+
+### DLE 11.1
+
+Архив:
+
+```text
+.local_migration/dle_versions/11.1_utf8/dle11.1_utf8.zip
+```
+
+Upgrade `/upgrade/index.php` успешно завершён. Важное изменение:
+
+```text
+dle_users.password изменён с VARCHAR(32) на VARCHAR(255)
+```
+
+Хеши паролей не пересчитывались и остались старыми 32-символьными хешами. После upgrade проверен вход локальным migration-admin аккаунтом `Personage`.
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/11.1-utf8-php74-ok/
+```
+
+### DLE 11.2
+
+Архив:
+
+```text
+.local_migration/dle_versions/11.2_utf8/dle11.2_utf8.zip
+```
+
+Upgrade `/upgrade/index.php` успешно завершён. Проверено:
+
+```text
+engine/data/config.php: version_id = 11.2
+dle_twofactor создана
+dle_users.twofactor_auth добавлен
+dle_files.checksum добавлен
+Personage login работает
+Drage остаётся на исходном хеше из бэкапа
+```
+
+После upgrade удалены:
+
+```text
+.local_migration/www_utf8/upgrade/
+.local_migration/www_utf8/install.php
+```
+
+Проверка страниц на `web74_utf8`:
+
+```text
+/                            200
+/index.php                   200
+/6-ustanovka.html            200
+/5-otkrytie.html             200
+/7-tekstura.html             200
+/news/                       200
+/help/                       200
+/plugins/                    200
+/index.php?do=feedback       200
+/index.php?do=lastcomments   200
+```
+
+Свежие логи `web74_utf8` после проверки не содержали fatal/parse/warning/notice/deprecated/error.
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/11.2-utf8-php74-ok/
+```
+
+Следующий практический шаг:
+
+```text
+Начать официальный upgrade DLE 11.2 UTF-8 -> DLE 11.3 UTF-8.
+```
