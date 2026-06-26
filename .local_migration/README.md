@@ -1155,64 +1155,6 @@ http://localhost:8081
 Начать официальный upgrade DLE 11.2 UTF-8 -> DLE 11.3 UTF-8.
 ```
 
-## 35. Контрольный аудит DLE 11.2 от 2026-06-26
-
-Git и GitHub:
-
-```text
-origin/main: 03e83b3
-tag: checkpoint-11.2-utf8-php74-ok-password-verified
-tracked worktree: clean before this audit note
-```
-
-Текущая локальная версия:
-
-```text
-web74_utf8: http://localhost:8075
-engine/data/config.php: version_id = 11.2
-charset = utf-8
-```
-
-Пароли администраторов в локальной Docker-БД:
-
-```text
-Drage:    32-символьный исходный MD5-хеш из бэкапа сохранён.
-Personage: bcrypt-хеш $2y$ длиной 60 символов после успешного входа на DLE 11.2.
-```
-
-Проверка страниц:
-
-```text
-/                            200
-/index.php                   200
-/6-ustanovka.html            200
-/5-otkrytie.html             200
-/7-tekstura.html             200
-/news/                       200
-/help/                       200
-/plugins/                    200
-/index.php?do=feedback       200
-/index.php?do=lastcomments   200
-/admin.php                   200
-/rss.xml                     200
-/sitemap.xml                 404
-/engine/opensearch.php       200
-```
-
-Основные HTML-страницы и админка открываются. Свежие логи `web74_utf8` после проверки не содержали fatal/parse/warning/notice/deprecated/error.
-
-Известные замечания текущего DLE 11.2 на PHP 7.4:
-
-```text
-/rss.xml и /engine/opensearch.php выводят Deprecated:
-Array and string offset access syntax with curly braces is deprecated
-/var/www/html/engine/classes/templates.class.php on line 226
-```
-
-`templates.class.php` в `.local_migration/www_utf8` совпадает с оригинальным файлом официального DLE 11.2 UTF-8 архива. Вручную ядро не править; это предупреждение нужно закрывать следующим официальным upgrade или переходом на версию, где DLE уже исправил этот синтаксис.
-
-`/sitemap.xml` сейчас отдаёт 404. Это не PHP fatal и не ошибка миграции БД, но перед финальным переносом нужно отдельно проверить генерацию sitemap/ЧПУ в актуальной финальной версии DLE.
-
 ## 30. Обновление статуса от 2026-06-26
 
 Docker Desktop через Windows не был установлен, потому что установка требовала интерактивного UAC, а пользователь работал с мобильного без доступа к экрану компьютера.
@@ -1659,3 +1601,61 @@ Personage: bcrypt-хеш после успешного входа на DLE 11.2.
 ```text
 Начать официальный upgrade DLE 11.2 UTF-8 -> DLE 11.3 UTF-8.
 ```
+
+## 35. Контрольный аудит DLE 11.2 от 2026-06-26
+
+Git и GitHub:
+
+```text
+origin/main обновлён.
+tag: checkpoint-11.2-utf8-php74-ok-password-verified
+tracked worktree: clean before this audit note
+```
+
+Текущая локальная версия:
+
+```text
+web74_utf8: http://localhost:8075
+engine/data/config.php: version_id = 11.2
+charset = utf-8
+```
+
+Пароли администраторов в локальной Docker-БД:
+
+```text
+Drage:    32-символьный исходный MD5-хеш из бэкапа сохранён.
+Personage: bcrypt-хеш $2y$ длиной 60 символов после успешного входа на DLE 11.2.
+```
+
+Проверка страниц:
+
+```text
+/                            200
+/index.php                   200
+/6-ustanovka.html            200
+/5-otkrytie.html             200
+/7-tekstura.html             200
+/news/                       200
+/help/                       200
+/plugins/                    200
+/index.php?do=feedback       200
+/index.php?do=lastcomments   200
+/admin.php                   200
+/rss.xml                     200
+/sitemap.xml                 404
+/engine/opensearch.php       200
+```
+
+Основные HTML-страницы и админка открываются. Свежие логи `web74_utf8` после проверки не содержали fatal/parse/warning/notice/deprecated/error.
+
+Известные замечания текущего DLE 11.2 на PHP 7.4:
+
+```text
+/rss.xml и /engine/opensearch.php выводят Deprecated:
+Array and string offset access syntax with curly braces is deprecated
+/var/www/html/engine/classes/templates.class.php on line 226
+```
+
+`templates.class.php` в `.local_migration/www_utf8` совпадает с оригинальным файлом официального DLE 11.2 UTF-8 архива. Вручную ядро не править; это предупреждение нужно закрывать следующим официальным upgrade или переходом на версию, где DLE уже исправил этот синтаксис.
+
+`/sitemap.xml` сейчас отдаёт 404. Это не PHP fatal и не ошибка миграции БД, но перед финальным переносом нужно отдельно проверить генерацию sitemap/ЧПУ в актуальной финальной версии DLE.
