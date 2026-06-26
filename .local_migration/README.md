@@ -1028,7 +1028,7 @@ EasyLike
 
 ### 22.1. TODO: вернуть и адаптировать whoonline snippet
 
-На текущем мигрированном стенде DLE 15.1 в сайдбаре шаблона `Pisces` видна ошибка:
+На текущем мигрированном стенде DLE 16.1 в сайдбаре шаблона `Pisces` видна ошибка:
 
 ```text
 File engine/modules/snippets/whoonline.php not found.
@@ -1189,28 +1189,27 @@ http://localhost:8081
 
 ## 29. Текущий статус
 
-На момент создания этого документа:
+Текущий актуальный статус на 2026-06-27:
 
 ```text
-1. Бэкапы найдены.
-2. Чистая копия сайта распакована.
-3. Локальная рабочая копия сайта подготовлена в .local_migration/www.
-4. SQL для автоимпорта подготовлен.
-5. Docker Compose конфиг создан.
-6. Домен для эмуляции выбран: corneroids.by.
-7. Найдена распакованная DLE 19.0 в /mnt/h/dle19_0.
-8. Найдены официальные архивы DLE 10.5-20.0 в Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\.
-9. Зафиксировано требование проходить upgrade последовательно по одной версии, без прыжка сразу на DLE 20.0.
-10. Docker Engine установлен и работает внутри WSL Ubuntu.
-11. cp1251 baseline проверен на PHP 7.4.
-12. UTF-8 baseline проверен на PHP 7.4.
-13. hosts-записи ещё нужно добавить вручную в Windows, если нужен доступ по домену из браузера Windows.
+1. Миграция пройдена последовательно до DLE 16.1 UTF-8.
+2. Активная локальная копия: .local_migration/www_utf8.
+3. Активный шаблон: templates/Pisces.
+4. Docker Engine работает внутри WSL Ubuntu.
+5. Проверенный PHP 7.4 URL: http://127.0.0.1:8075
+6. Проверенный PHP 8.2 URL: http://127.0.0.1:8083
+7. Smoke-check на DLE 16.1: PHP 7.4 и PHP 8.2 без PHP/MySQL диагностик на проверенных URL.
+8. GitHub синхронизирован; актуальный commit проверяется через git log.
+9. Официальные архивы до DLE 20.0 доступны в /mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/.
+10. Известный визуальный дефект: отсутствует кастомный engine/modules/snippets/whoonline.php.
+11. whoonline нужно портировать из legacy после завершения core-migration до DLE 20.0.
+12. hosts-записи в Windows нужны только если требуется доступ по http://corneroids.by:8075 из обычного браузера.
 ```
 
 Следующий практический шаг:
 
 ```text
-Начать официальный upgrade DLE 11.2 UTF-8 -> DLE 11.3 UTF-8.
+Начать официальный upgrade DLE 16.1 UTF-8 -> DLE 17.0 UTF-8.
 ```
 
 ## 30. Обновление статуса от 2026-06-26
@@ -3428,7 +3427,7 @@ install.php удалён
 
 ## 54. Операционные заметки, которые нельзя терять
 
-### 40.1. Соответствие файлов шаблона Pisces и Default changelog
+### 54.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -3460,7 +3459,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 40.2. Personage, Drage и временные пароли
+### 54.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
@@ -3470,11 +3469,11 @@ Drage должен сохранять исходный 32-символьный M
 Personage использовать как локальный migration-admin.
 ```
 
-Текущее состояние локальной Docker-БД после upgrade до DLE 12.1:
+Текущее состояние локальной Docker-БД после upgrade до DLE 16.1:
 
 ```text
 Drage:    user_group = 1, password length = 32, prefix = b486
-Personage: user_group = 1, password length = 60, prefix = $2y$
+Personage: user_group = 1, password length = 32, prefix = dc98
 ```
 
 Важный нюанс upgrade-мастера: когда у пользователя старый MD5-хеш, DLE проверяет пароль по старой схеме:
@@ -3483,7 +3482,7 @@ Personage: user_group = 1, password length = 60, prefix = $2y$
 stored password = md5(md5(plain_password))
 ```
 
-Во время перехода 11.3/12.0/12.1 для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. После обычного входа в `admin.php` DLE снова перевёл `Personage` на bcrypt-хеш `$2y$`.
+Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 16.1 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
 
 Не сохранять реальные или временные пароли в Git/README. Значение временного пароля во время текущей сессии лежало только вне репозитория:
 
@@ -3496,8 +3495,8 @@ C:\Users\Ivan\AppData\Local\Temp\personage_migration_password.txt
 ```text
 1. Сгенерировать новый временный migration-only пароль.
 2. В локальной Docker-БД установить Personage password = md5(md5(new_plain_password)).
-3. Войти в /upgrade/index.php или /admin.php под Personage.
-4. После обычного входа в admin.php проверить, что DLE снова перевёл Personage на bcrypt $2y$.
+3. Войти в /admin.php под Personage.
+4. После входа проверить фактический формат хеша, потому что в разных версиях DLE поведение миграции пароля меняется.
 5. Не менять Drage.
 ```
 
