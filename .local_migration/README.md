@@ -379,7 +379,10 @@ CREATE TABLE `dle_admin_logs` (
     001-db.sql
   scripts/
     prepare-db.sh
+    convert-files-to-utf8.py
+    create-utf8-copy.sh
   www/
+  www_utf8/
 ```
 
 ### 6.2. Что где лежит
@@ -444,6 +447,8 @@ define ("COLLATE", "cp1251");
 ```text
 web74       PHP 7.4 + Apache
 web82       PHP 8.2 + Apache
+web74_utf8  PHP 7.4 + Apache, UTF-8 copy
+web82_utf8  PHP 8.2 + Apache, UTF-8 copy
 db          MariaDB 10.11
 phpmyadmin  phpMyAdmin
 ```
@@ -453,6 +458,8 @@ phpmyadmin  phpMyAdmin
 ```text
 web74:      http://localhost:8074
 web82:      http://localhost:8082
+web74_utf8: http://localhost:8075
+web82_utf8: http://localhost:8083
 phpmyadmin: http://localhost:8081
 MariaDB:    localhost:3307
 ```
@@ -475,33 +482,19 @@ user: root
 password: root
 ```
 
-## 8. Что требуется установить
+## 8. Что установлено для локального стенда
 
-Сейчас в WSL не было найдено:
+Docker Desktop через Windows не использовался, потому что установка требовала интерактивного UAC, а пользователь работал с мобильного.
 
-```text
-docker
-php
-mysql
-mariadb
-```
-
-Также `sudo` требует пароль, поэтому автоматическая установка пакетов из WSL невозможна без участия пользователя.
-
-Рекомендуемый вариант:
+Вместо этого Docker Engine установлен напрямую внутри WSL Ubuntu:
 
 ```text
-Docker Desktop for Windows
+Docker Engine: 29.1.3
+Docker Compose: 2.40.3
+Docker service: active/running через systemd
 ```
 
-Нужно:
-
-```text
-1. Установить Docker Desktop.
-2. Включить WSL integration для Ubuntu.
-3. Перезапустить WSL/терминал.
-4. Проверить в WSL:
-```
+Проверка в WSL:
 
 ```bash
 docker compose version
@@ -541,6 +534,18 @@ http://corneroids.by:8074
 
 ```text
 http://corneroids.by:8082
+```
+
+UTF-8 копия DLE 10.5 на PHP 7.4:
+
+```text
+http://corneroids.by:8075
+```
+
+UTF-8 копия на PHP 8.2:
+
+```text
+http://corneroids.by:8083
 ```
 
 Важно: hosts-подмена помогает локальному сайту видеть `HTTP_HOST=corneroids.by`, но не гарантирует прохождение онлайн-проверки лицензии на стороне `dle-news.ru`.
@@ -1038,25 +1043,15 @@ define ("DBUSER", "<production-db-user>");
 
 ## 24. Что требуется от пользователя сейчас
 
-На текущем этапе нужно:
+На текущем этапе Docker уже установлен, cp1251 baseline и UTF-8 baseline проверены локально. От пользователя сейчас требуется только то, что нельзя безопасно сделать без доступа к внешним данным или интерактивному окружению:
 
 ```text
-1. Установить Docker Desktop for Windows.
-2. Включить WSL integration для Ubuntu.
-3. Проверить в WSL:
+1. Если нужен доступ через http://corneroids.by:8074/8075 в браузере Windows, добавить hosts-записи вручную.
+2. Скопировать или распаковать найденные архивы DLE 10.5-20.0 из Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\ в .local_migration/dle_versions/.
+3. Подтвердить, что можно начинать первый официальный upgrade: DLE 10.5 UTF-8 -> DLE 10.6 UTF-8.
 ```
 
-```bash
-docker compose version
-```
-
-```text
-4. Добавить hosts-записи для corneroids.by.
-5. Скопировать или распаковать найденные архивы DLE 10.5-20.0 из Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\ в .local_migration/dle_versions/.
-6. После запуска стенда проверить DLE 10.5 cp1251, выполнить UTF-8-конвертацию, затем идти по upgrade-цепочке строго по одной версии.
-```
-
-## 25. Команды, которые нужно выполнить после установки Docker
+## 25. Команды для запуска стенда
 
 ```bash
 cd /home/ivandechenko/dev/corneroids.by/.local_migration
@@ -1080,6 +1075,7 @@ docker compose logs -f db
 
 ```text
 http://corneroids.by:8074
+http://corneroids.by:8075
 http://localhost:8081
 ```
 
@@ -1147,14 +1143,16 @@ http://localhost:8081
 7. Найдена распакованная DLE 19.0 в /mnt/h/dle19_0.
 8. Найдены официальные архивы DLE 10.5-20.0 в Z:\Ванина папка\1САЙТ\Движки\DLE\ЛИЦЕНЗИЯ\.
 9. Зафиксировано требование проходить upgrade последовательно по одной версии, без прыжка сразу на DLE 20.0.
-10. Docker пока не установлен/не доступен в WSL.
-11. hosts-записи ещё нужно добавить вручную в Windows.
+10. Docker Engine установлен и работает внутри WSL Ubuntu.
+11. cp1251 baseline проверен на PHP 7.4.
+12. UTF-8 baseline проверен на PHP 7.4.
+13. hosts-записи ещё нужно добавить вручную в Windows, если нужен доступ по домену из браузера Windows.
 ```
 
 Следующий практический шаг:
 
 ```text
-Установить Docker Desktop, включить WSL integration, запустить docker compose.
+Начать официальный upgrade DLE 10.5 UTF-8 -> DLE 10.6 UTF-8.
 ```
 
 ## 30. Обновление статуса от 2026-06-26
@@ -1230,5 +1228,65 @@ Fatal error: Array and string offset access syntax with curly braces is no longe
 Следующий практический шаг:
 
 ```text
-Начать подготовку UTF-8-копии DLE 10.5, не трогая checkpoint 10.5-cp1251-php74-ok.
+См. следующий раздел: UTF-8-копия DLE 10.5 подготовлена и проверена.
 ```
+
+## 31. Обновление статуса: UTF-8 baseline от 2026-06-26
+
+Созданы скрипты:
+
+```text
+.local_migration/scripts/convert-files-to-utf8.py
+.local_migration/scripts/create-utf8-copy.sh
+```
+
+`create-utf8-copy.sh` воспроизводимо создаёт отдельную UTF-8 копию:
+
+```text
+.local_migration/www_utf8
+database: corneroids_utf8
+charset/collation: utf8mb4 / utf8mb4_unicode_ci
+```
+
+Важно: скрипт очищает содержимое `.local_migration/www_utf8`, но не удаляет сам каталог. Это нужно для корректной работы Docker bind mount при уже запущенных контейнерах.
+
+Проверка после полного пересоздания UTF-8 копии:
+
+```text
+web74_utf8: http://localhost:8075
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+HTML meta charset: utf-8
+Title: Всё для  игры Corneroids!
+```
+
+База проверена:
+
+```text
+corneroids_utf8.dle_post: 113 новостей
+CHARSET(title): utf8mb4
+Примеры заголовков читаются корректно:
+- Открытие сайта Corneroids.by
+- Как установить Corneroids на компьютер
+- Текстура Drage01
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/10.5-utf8-php74-ok/
+  README.txt
+  db.sql
+  www_utf8.tar.gz
+```
+
+Этот checkpoint игнорируется git и не публикуется в репозиторий.
+
+PHP 8.2 для UTF-8 копии пока падает на старой несовместимости DLE 10.5:
+
+```text
+Fatal error: Array and string offset access syntax with curly braces is no longer supported
+/var/www/html/engine/classes/templates.class.php on line 220
+```
+
+Это ожидаемо и не блокирует следующий шаг, потому что официальный upgrade нужно начинать с проверенной DLE 10.5 UTF-8 на PHP 7.4.

@@ -37,6 +37,7 @@ upload_forum/control_center/configuration.php
 # Generated local migration data
 .local_migration/mysql-init/*.sql
 .local_migration/www/
+.local_migration/www_utf8/
 .local_migration/dle_versions/
 .local_migration/dle_latest/
 .local_migration/checkpoints/

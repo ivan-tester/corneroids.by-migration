@@ -23,6 +23,30 @@ services:
       - "corneroids.by:127.0.0.1"
       - "www.corneroids.by:127.0.0.1"
 
+  web74_utf8:
+    build: ./docker/php74
+    ports:
+      - "8075:80"
+    volumes:
+      - ./www_utf8:/var/www/html
+    depends_on:
+      - db
+    extra_hosts:
+      - "corneroids.by:127.0.0.1"
+      - "www.corneroids.by:127.0.0.1"
+
+  web82_utf8:
+    build: ./docker/php82
+    ports:
+      - "8083:80"
+    volumes:
+      - ./www_utf8:/var/www/html
+    depends_on:
+      - db
+    extra_hosts:
+      - "corneroids.by:127.0.0.1"
+      - "www.corneroids.by:127.0.0.1"
+
   db:
     image: mariadb:10.11
     ports:
