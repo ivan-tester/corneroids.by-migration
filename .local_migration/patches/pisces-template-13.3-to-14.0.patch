@@ -1,0 +1,39 @@
+--- templates/Pisces/style/engine.css
++++ templates/Pisces/style/engine.css
+@@
+ .sortable-ghost {
+ 	opacity: 0.4;
+ }
++
++.emoji_box {
++	width:100%;
++	max-width: 390px;
++}
++.emoji_category {
++	padding:7px;
++	clear:both;
++}
++.emoji_list {
++	margin-top:5px;
++	margin-bottom:5px;
++	width:100%;
++	font-family:'Apple Color Emoji', 'Segoe UI Emoji', 'NotoColorEmoji', 'Segoe UI Symbol', 'Android Emoji', 'EmojiSymbols';
++	font-size:2em;
++}
++.emoji_symbol {
++	float:left;
++	margin-bottom: 10px;
++	width:12.5%;
++	text-align:center;
++}
++
++.emoji_symbol a,  .emoji_symbol a:hover {
++	cursor: pointer;
++	text-decoration:none;
++}
++
++.native-emoji {
++	font-size: 1.3em;
++	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'NotoColorEmoji', 'Segoe UI Symbol', 'Android Emoji', 'EmojiSymbols';
++}
+ .uploadedfile .info {

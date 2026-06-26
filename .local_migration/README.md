@@ -2446,7 +2446,106 @@ Core-файл `engine/modules/sitelogin.php` не исправлялся вру�
 Перед применением проверить charset/version в официальном архиве dle14_0.zip и изменения шаблона 13.3 -> 14.0.
 ```
 
-## 44. Операционные заметки, которые нельзя терять
+## 44. Обновление статуса: DLE 14.0 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 13.3 до DLE 14.0.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle14_0.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 14.0
+install.php: charset = utf-8
+engine/inc/upgrade/13.3.php exists
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"14.0"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 14.0
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Официальный changelog для Default template на переходе 13.3 -> 14.0 требует добавить emoji CSS в `css/engine.css`.
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Добавленные CSS-блоки:
+
+```text
+.emoji_box
+.emoji_category
+.emoji_list
+.emoji_symbol
+.native-emoji
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-13.3-to-14.0.patch
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/14.0-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 PHP_TEXT
+Fatal error: Uncaught ValueError: array_rand(): Argument #1 ($array) cannot be empty in /var/www/html/engine/modules/vote.php:80
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+PHP 8.2 ошибка изменилась относительно 13.3: теперь проблема не в `sitelogin.php`, а в оригинальном core-файле `engine/modules/vote.php`. Core-файл вручную не исправлялся.
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 14.0 UTF-8 -> DLE 14.1.
+Перед применением проверить charset/version в официальном архиве dle14_1.zip и изменения шаблона 14.0 -> 14.1.
+```
+
+## 45. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
