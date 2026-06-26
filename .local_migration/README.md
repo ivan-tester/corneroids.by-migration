@@ -1755,3 +1755,153 @@ BB-редактор отдельно не переписывался: блок `
 ```
 
 В HTML этих ответов не найдено `fatal error`, `parse error`, `warning`, `notice`, `deprecated`. Свежие логи `web74_utf8` после запросов не содержат новых PHP fatal/parse/warning/notice/deprecated/error; видны только стартовые Apache notice.
+
+## 37. Обновление статуса: DLE 11.3 UTF-8 от 2026-06-26
+
+Официальный архив:
+
+```text
+source: /mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle11.3_utf8.zip
+local:  .local_migration/dle_versions/11.3_utf8/
+```
+
+Проверка архива:
+
+```text
+upload/upgrade/index.php: $dle_version = "11.3"
+upload/upgrade/index.php: $distr_charset = "utf-8"
+```
+
+Официальная инструкция `Documentation/upgrade.html` для этого архива:
+
+```text
+1. Обновить все файлы из /upload/, кроме /templates/.
+2. Если отсутствует templates/smartphone, скопировать его из дистрибутива.
+3. Запустить /upgrade/index.php.
+4. Удалить /upgrade/ и install.php.
+```
+
+Перед upgrade создан checkpoint текущей DLE 11.2 с уже адаптированным шаблоном Pisces:
+
+```text
+.local_migration/checkpoints/11.2-utf8-php74-template-ok/
+  README.txt
+  db.sql
+  www_utf8.tar.gz
+```
+
+Файлы 11.3 наложены штатно:
+
+```text
+source: .local_migration/dle_versions/11.3_utf8/extracted/upload/
+target: .local_migration/www_utf8/
+excluded:
+  /templates/
+  /engine/data/
+  /uploads/
+  /backup/
+```
+
+`/templates/` сохранён, поэтому рабочие правки `Pisces` не были затёрты. Файлы ядра вручную не правились.
+
+Upgrade `/upgrade/index.php` успешно завершён:
+
+```text
+11.2 -> 11.3
+engine/data/config.php: version_id = 11.3
+charset = utf-8
+skin = Pisces
+```
+
+После upgrade удалены:
+
+```text
+.local_migration/www_utf8/upgrade/
+.local_migration/www_utf8/install.php
+```
+
+Локальная админка показала предупреждение о правах на cache-директории; для Docker-стенда выставлены права:
+
+```text
+.local_migration/www_utf8/engine/cache
+.local_migration/www_utf8/engine/cache/system
+```
+
+Пароли администраторов:
+
+```text
+Drage:    32-символьный исходный MD5-хеш из бэкапа сохранён.
+Personage: временно использовался как migration-admin; после обычного входа в admin.php снова имеет bcrypt-хеш $2y$ длиной 60.
+```
+
+`Drage` для технического входа не использовался.
+
+Адаптация шаблона Pisces по официальному `templates-changelog` для 11.2 -> 11.3:
+
+```text
+templates/Pisces/style/styles.css
+  добавлено: .instagram-media, .twitter-tweet { display: inline-block !important; }
+
+templates/Pisces/feedback.tpl
+  добавлен блок [attachments] с input name="attachments[]" type="file" multiple
+```
+
+Официальный changelog написан для `Default`; изменения перенесены в структуру `Pisces`, а не скопированы механически.
+
+Воспроизводимый patch сохранён в Git:
+
+```text
+.local_migration/patches/pisces-template-11.2-to-11.3.patch
+```
+
+Проверка страниц на `web74_utf8`:
+
+```text
+/                            200
+/index.php                   200
+/6-ustanovka.html            200
+/5-otkrytie.html             200
+/7-tekstura.html             200
+/news/                       200
+/help/                       200
+/plugins/                    200
+/index.php?do=feedback       200
+/index.php?do=lastcomments   200
+/admin.php                   200
+/rss.xml                     200
+/sitemap.xml                 404
+/engine/opensearch.php       200
+```
+
+Основные HTML-страницы и админка открываются без PHP diagnostic text. Свежие логи `web74_utf8` после проверки не содержат новых PHP fatal/parse/warning/notice/deprecated/error.
+
+Известные замечания DLE 11.3:
+
+```text
+/rss.xml и /engine/opensearch.php выводят Deprecated:
+Array and string offset access syntax with curly braces is deprecated
+/var/www/html/engine/classes/templates.class.php on line 232
+
+PHP 8.2 всё ещё падает на этой же несовместимости:
+Fatal error: Array and string offset access syntax with curly braces is no longer supported
+/var/www/html/engine/classes/templates.class.php on line 232
+
+/sitemap.xml отдаёт 404
+```
+
+`templates.class.php` оставлен оригинальным из официального DLE 11.3 UTF-8 архива. Ядро вручную не править; это должно закрыться последующим официальным upgrade.
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/11.3-utf8-php74-ok/
+  README.txt
+  db.sql
+  www_utf8.tar.gz
+```
+
+Следующий практический шаг:
+
+```text
+Начать официальный upgrade DLE 11.3 UTF-8 -> DLE 12.0 UTF-8.
+```
