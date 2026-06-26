@@ -1,0 +1,131 @@
+diff --git a/templates/Pisces/style/engine.css b/templates/Pisces/style/engine.css
+--- a/templates/Pisces/style/engine.css
++++ b/templates/Pisces/style/engine.css
+@@
++.pm th {
++	text-align: left;
++	font-weight: 500;
++	white-space: nowrap;
++}
++
++.pm th.pm_checkbox {
++	text-align: center;
++}
++
++.pm_list.pm_subj,
++.pm_list.pm_icon,
++.pm_list.pm_last_user {
++	cursor: pointer;
++}
++
++.pm_list.pm_icon svg {
++	width: 1.4rem;
++	height: 1.4rem;
++	vertical-align: middle;
++}
++
++.pm_list.pm_icon.pm-unread-image {
++	color: #3394e6;
++}
++
++.pm td.pm_list.pm_icon,
++.userstop td,
++th.pm_head.pm_icon {
++	border-bottom: none;
++}
++
++.pm_list.pm_icon.pm-reply-image {
++	color: #087e02c4;
++}
++
++.pm_list.pm_icon.pm-read-image {
++	color: #afafaf;
++}
++
++.pm_list .pm_last_message,
++.pm_list .pm_last_date,
++.pm_list .pm_with_user {
++	color: #64748b;
++	font-size: .8rem;
++}
++
++.pm tbody > tr:hover {
++	background-color: #e2e8f099;
++}
++
++.pm_navigation {
++	margin-top: 1rem;
++}
++
++.pm_navigation .navigation {
++	display: inline-block;
++	color: #333333;
++	background-color: #f5f5f5;
++	border-radius: 0.188rem;
++	padding: .4rem;
++}
++
++.pm_navigation .navigation a,
++.pm_navigation .navigation span {
++	padding: 0.5rem;
++	min-width: 2.25rem;
++}
++
++.pm_navigation .navigation span {
++	background-color: #4581d0;
++	color: #fff;
++}
++
++.pm_navigation .navigation a {
++	text-decoration: none;
++	color: #000;
++}
++
++.pm_navigation .navigation a:hover {
++	background-color: #e2e8f0;
++}
+diff --git a/templates/Pisces/pm.tpl b/templates/Pisces/pm.tpl
+--- a/templates/Pisces/pm.tpl
++++ b/templates/Pisces/pm.tpl
+@@
+ [readpm]
++	<h2 class="dpad heading" style="margin-bottom: 0;">{subj}</h2>
++	[messages]
+ 	<div class="bcomment">
+@@
+-				<h3 style="margin-bottom: 0.4em;">[reply]{subj}[/reply]</h3>
++				<h3 style="margin-bottom: 0.4em;">{subj}</h3>
+ 				{text}
+@@
+ 		<div class="clr"></div>
+ 	</div>
++	[/messages]
++	<div class="baseform">
++		<div class="dcont"><h2 class="heading">Ответить на сообщение</h2></div>
++		<div class="dpad editorcomm">{editor}</div>
++		<div class="fieldsubmit">
++			<button class="fbutton" type="submit" name="submit" title="Ответить"><span>Ответить</span></button>
++		</div>
++	</div>
+ [/readpm]
+diff --git a/templates/Pisces/addnews.tpl b/templates/Pisces/addnews.tpl
+--- a/templates/Pisces/addnews.tpl
++++ b/templates/Pisces/addnews.tpl
+@@
+ 					<b>Вводная часть: <span class="impot">*</span></b> (Обязательно)
+-					[not-wysywyg]
+-					<div class="bb-editor">
+-						{bbcode}
+-						<textarea name="short_story" id="short_story" onfocus="setFieldName(this.name)" rows="15" class="f_textarea" >{short-story}</textarea>
+-					</div>
+-					[/not-wysywyg]
+ 					{shortarea}
+@@
+ 					<b>Подробная часть:</b> (Необязательно)
+-					[not-wysywyg]
+-					<div class="bb-editor">
+-						{bbcode}
+-						<textarea name="full_story" id="full_story" onfocus="setFieldName(this.name)" rows="20" class="f_textarea" >{full-story}</textarea>
+-					</div>
+-					[/not-wysywyg]
+ 					{fullarea}

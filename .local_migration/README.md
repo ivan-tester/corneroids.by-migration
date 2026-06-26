@@ -3815,16 +3815,150 @@ install.php удалён
 /engine/opensearch.php         302 ok
 ```
 
+Статус следующего шага:
+
+```text
+DLE 17.3 UTF-8 -> DLE 18.0 выполнен, см. раздел 59.
+```
+
+## 59. Обновление статуса: DLE 18.0 UTF-8 от 2026-06-27
+
+Миграция `17.3 -> 18.0` выполнена на UTF-8 копии:
+
+```text
+.local_migration/www_utf8
+```
+
+Официальный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle18_0.zip
+```
+
+Распакованная копия:
+
+```text
+.local_migration/dle_versions/18.0/extracted
+```
+
+Проверки архива перед применением:
+
+```text
+install.php: version_id = 18.0
+install.php: charset = utf-8
+engine/inc/upgrade/17.3.php найден
+```
+
+Файлы DLE 18.0 наложены поверх активной UTF-8 копии с сохранением пользовательских данных и шаблона:
+
+```bash
+rsync -a --no-owner --no-group --omit-dir-times --delete \
+  --exclude='/templates/' --exclude='/engine/data/' --exclude='/engine/cache/' \
+  --exclude='/uploads/' --exclude='/backup/' \
+  .local_migration/dle_versions/18.0/extracted/upload/ \
+  .local_migration/www_utf8/
+```
+
+Upgrade-мастер успешно прошёл шаг `17.3 -> 18.0`:
+
+```text
+admin upgrade page: version_18_0_seen
+ajax upgrade response: {"status":"ok","version":"18.0"}
+```
+
+Финальное состояние:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 18.0
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/18.0-utf8-php74-ok
+```
+
+### 59.1. Изменения шаблона Pisces для DLE 18.0
+
+Официальный `templates-changelog` описывает изменения для шаблона `Default`, поэтому изменения адаптированы под текущий `templates/Pisces`.
+
+Сделано:
+
+```text
+templates/Pisces/style/engine.css
+- добавлены CSS-правила для нового списка персональных сообщений DLE 18.0.
+
+templates/Pisces/pm.tpl
+- блок чтения сообщения адаптирован под новый PM-формат;
+- старая разметка сообщения обёрнута в [messages]...[/messages];
+- добавлена форма ответа через {editor}.
+
+templates/Pisces/addnews.tpl
+- удалён legacy BBCode fallback [not-wysywyg] с {bbcode} и raw textarea;
+- оставлены визуальные editor-теги {shortarea} и {fullarea}.
+```
+
+Patch с адаптацией шаблона:
+
+```text
+.local_migration/patches/pisces-template-17.3-to-18.0.patch
+```
+
+CSS старого Froala-редактора из `engine/editor/css/default.css` не переносился: на текущем шаблоне нет подтверждения, что он реально использовался. Если позже обнаружится сломанная стилизация старых editor-элементов, переносить только нужные правила и только в шаблон, не в core DLE.
+
+### 59.2. Проверка после DLE 18.0
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/index.php?do=pm               200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         404 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/index.php?do=pm               200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         404 ok
+```
+
+`/engine/opensearch.php` на DLE 18.0 возвращает `404`, хотя на 17.3 возвращал `302`. Fatal/error diagnostics на проверенных страницах не обнаружены, но это изменение поведения нужно держать в уме при финальном QA.
+
 Следующий шаг:
 
 ```text
-Подготовить upgrade DLE 17.3 UTF-8 -> DLE 18.0.
-Перед применением проверить charset/version в официальном архиве dle18_0.zip и изменения шаблона 17.3 -> 18.0.
+Подготовить upgrade DLE 18.0 UTF-8 -> DLE 18.1.
+Перед применением проверить charset/version в официальном архиве dle18_1.zip и изменения шаблона 18.0 -> 18.1.
 ```
 
-## 59. Операционные заметки, которые нельзя терять
+## 60. Операционные заметки, которые нельзя терять
 
-### 59.1. Соответствие файлов шаблона Pisces и Default changelog
+### 60.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -3856,7 +3990,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 59.2. Personage, Drage и временные пароли
+### 60.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
@@ -3866,7 +4000,7 @@ Drage должен сохранять исходный 32-символьный M
 Personage использовать как локальный migration-admin.
 ```
 
-Текущее состояние локальной Docker-БД после upgrade до DLE 17.3:
+Текущее состояние локальной Docker-БД после upgrade до DLE 18.0:
 
 ```text
 Drage:    user_group = 1, password length = 32, prefix = b486
@@ -3879,7 +4013,7 @@ Personage: user_group = 1, password length = 32, prefix = dc98
 stored password = md5(md5(plain_password))
 ```
 
-Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 16.1 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
+Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 18.0 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
 
 Не сохранять реальные или временные пароли в Git/README. Значение временного пароля во время текущей сессии лежало только вне репозитория:
 
