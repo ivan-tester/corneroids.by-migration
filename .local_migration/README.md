@@ -2140,3 +2140,80 @@ Fatal error: Array and string offset access syntax with curly braces is no longe
 Подготовить upgrade DLE 12.1 UTF-8 -> DLE 13.0.
 Перед наложением dle13_0.zip обязательно проверить, что дистрибутив в архиве имеет $distr_charset = "utf-8", так как имя архива не содержит _utf8.
 ```
+
+## 40. Операционные заметки, которые нельзя терять
+
+### 40.1. Соответствие файлов шаблона Pisces и Default changelog
+
+Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
+
+Для активного шаблона `Pisces`:
+
+```text
+Default changelog: css/styles.css
+Pisces equivalent: templates/Pisces/style/styles.css
+```
+
+Причина: `templates/Pisces/main.tpl` подключает:
+
+```html
+<link href="{THEME}/style/styles.css" type="text/css" rel="stylesheet" />
+<link href="{THEME}/style/engine.css" type="text/css" rel="stylesheet" />
+```
+
+Поэтому CSS-изменение из changelog 11.2 -> 11.3:
+
+```css
+.instagram-media, .twitter-tweet { display: inline-block !important; }
+```
+
+было добавлено именно в:
+
+```text
+.local_migration/www_utf8/templates/Pisces/style/styles.css
+```
+
+а не в несуществующий для Pisces путь `css/styles.css`.
+
+### 40.2. Personage, Drage и временные пароли
+
+Текущее правило миграции:
+
+```text
+Drage не использовать для технических входов в upgrade/admin.
+Drage должен сохранять исходный 32-символьный MD5-хеш из бэкапа.
+Personage использовать как локальный migration-admin.
+```
+
+Текущее состояние локальной Docker-БД после upgrade до DLE 12.1:
+
+```text
+Drage:    user_group = 1, password length = 32, prefix = b486
+Personage: user_group = 1, password length = 60, prefix = $2y$
+```
+
+Важный нюанс upgrade-мастера: когда у пользователя старый MD5-хеш, DLE проверяет пароль по старой схеме:
+
+```text
+stored password = md5(md5(plain_password))
+```
+
+Во время перехода 11.3/12.0/12.1 для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. После обычного входа в `admin.php` DLE снова перевёл `Personage` на bcrypt-хеш `$2y$`.
+
+Не сохранять реальные или временные пароли в Git/README. Значение временного пароля во время текущей сессии лежало только вне репозитория:
+
+```text
+C:\Users\Ivan\AppData\Local\Temp\personage_migration_password.txt
+```
+
+Этот файл не является источником истины и может отсутствовать после очистки temp. Если пароль потерян, безопасная процедура для локального стенда:
+
+```text
+1. Сгенерировать новый временный migration-only пароль.
+2. В локальной Docker-БД установить Personage password = md5(md5(new_plain_password)).
+3. Войти в /upgrade/index.php или /admin.php под Personage.
+4. После обычного входа в admin.php проверить, что DLE снова перевёл Personage на bcrypt $2y$.
+5. Не менять Drage.
+```
+
+Реальный пароль `Personage` от исходного сайта в README не известен и не должен требоваться для локальной миграции: локальный стенд использует управляемый migration-only доступ.
