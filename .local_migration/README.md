@@ -4328,16 +4328,161 @@ Patch с адаптацией шаблона:
 /engine/opensearch.php         403 ok
 ```
 
-Следующий шаг:
+Статус следующего шага:
 
 ```text
-Подготовить upgrade DLE 19.1 UTF-8 -> DLE 20.0.
-Перед применением проверить charset/version в официальном архиве dle20_0.zip и изменения шаблона 19.1 -> 20.0.
+DLE 19.1 UTF-8 -> DLE 20.0 выполнен, см. раздел 63.
 ```
 
-## 63. Операционные заметки, которые нельзя терять
+## 63. Обновление статуса: DLE 20.0 UTF-8 от 2026-06-27
 
-### 63.1. Соответствие файлов шаблона Pisces и Default changelog
+Миграция `19.1 -> 20.0` выполнена на UTF-8 копии:
+
+```text
+.local_migration/www_utf8
+```
+
+Официальный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle20_0.zip
+```
+
+Распакованная копия:
+
+```text
+.local_migration/dle_versions/20.0/extracted
+```
+
+Проверки архива перед применением:
+
+```text
+install.php: version_id = 20.0
+install.php: charset = utf-8
+engine/inc/upgrade/19.1.php найден
+```
+
+Файлы DLE 20.0 наложены поверх активной UTF-8 копии с сохранением пользовательских данных и шаблона:
+
+```bash
+rsync -a --no-owner --no-group --omit-dir-times --delete \
+  --exclude='/templates/' --exclude='/engine/data/' --exclude='/engine/cache/' \
+  --exclude='/uploads/' --exclude='/backup/' \
+  .local_migration/dle_versions/20.0/extracted/upload/ \
+  .local_migration/www_utf8/
+```
+
+Важно: DLE 20.0 уже несовместим с PHP 7.4 в admin/upgrade из-за использования `str_ends_with()`. Финальный upgrade `19.1 -> 20.0` выполнялся через PHP 8.2 стенд:
+
+```text
+http://127.0.0.1:8083
+```
+
+Upgrade-мастер успешно прошёл шаг `19.1 -> 20.0` под локальным migration-admin `Personage`:
+
+```text
+ajax upgrade response: {"status":"ok","version":"20.0"}
+admin upgrade check: Обновление скрипта до версии 20.0 завершено.
+```
+
+Финальное состояние:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 20.0
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/20.0-utf8-php82-ok
+```
+
+### 63.1. Изменения шаблона Pisces для DLE 20.0
+
+Официальный `templates-changelog` описывает изменения для `Default`, поэтому они адаптированы под текущий `templates/Pisces`.
+
+Сделано:
+
+```text
+templates/Pisces/style/engine.css
+- добавлены CSS-правила для .text_spoiler, календаря и quick edit editor.
+
+templates/Pisces/attachment.tpl
+- data-type для {online-view-link} изменён с "pdf" на "iframe".
+```
+
+Patch с адаптацией шаблона:
+
+```text
+.local_migration/patches/pisces-template-19.1-to-20.0.patch
+```
+
+### 63.2. Проверка после DLE 20.0
+
+Основной рабочий стенд для DLE 20.0:
+
+```text
+PHP 8.2: http://127.0.0.1:8083
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/index.php?do=pm               200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         403 ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/admin.php                     200 php74_incompatible
+```
+
+Причина несовместимости admin/upgrade на PHP 7.4:
+
+```text
+Fatal error: Uncaught Error: Call to undefined function str_ends_with()
+```
+
+Это не фиксировать правкой core-файлов: для DLE 20.0 нужно использовать PHP 8.x.
+
+Текущее состояние локальной Docker-БД после upgrade до DLE 20.0:
+
+```text
+Drage:    user_group = 1, password length = 32, prefix = b486
+Personage: user_group = 1, password length = 32, prefix = dc98
+```
+
+### 63.3. Оставшиеся задачи после достижения DLE 20.0
+
+Core DLE доведён до 20.0 без ручных правок файлов движка. Оставшиеся задачи относятся к пользовательскому коду и финальному QA:
+
+```text
+1. Вернуть и адаптировать custom snippet engine/modules/snippets/whoonline.php под DLE 20.0.
+2. Визуально проверить шаблон Pisces в браузере: главная, полная новость, категории, PM, addnews, userinfo, registration/validation, attachment preview.
+3. Отдельно проверить /engine/opensearch.php: на 20.0 он возвращает 403 из-за server configuration.
+4. Проверить дополнительные поля {xfields} в формах, если они реально настроены в админке.
+5. Перед production переносом решить, на какой PHP 8.x версии будет работать сайт, и не использовать PHP 7.4.
+```
+
+## 64. Операционные заметки, которые нельзя терять
+
+### 64.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -4369,7 +4514,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 63.2. Personage, Drage и временные пароли
+### 64.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
@@ -4379,7 +4524,7 @@ Drage должен сохранять исходный 32-символьный M
 Personage использовать как локальный migration-admin.
 ```
 
-Текущее состояние локальной Docker-БД после upgrade до DLE 19.1:
+Текущее состояние локальной Docker-БД после upgrade до DLE 20.0:
 
 ```text
 Drage:    user_group = 1, password length = 32, prefix = b486
@@ -4392,7 +4537,7 @@ Personage: user_group = 1, password length = 32, prefix = dc98
 stored password = md5(md5(plain_password))
 ```
 
-Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 19.1 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
+Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 20.0 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
 
 Не сохранять реальные или временные пароли в Git/README. Значение временного пароля во время текущей сессии лежало только вне репозитория:
 

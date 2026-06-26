@@ -1,0 +1,40 @@
+diff --git a/templates/Pisces/style/engine.css b/templates/Pisces/style/engine.css
+--- a/templates/Pisces/style/engine.css
++++ b/templates/Pisces/style/engine.css
+@@
+ .dleshowhidden {
+ 	color: #104d92;
+ 	background-color: #E3F2FD;
+ 	border: 1px solid #1E88E5;
+ 	box-shadow: 0 5px 12px rgba(126, 142, 177, 0.2);
+ 	padding: .83em;
+ }
++
++.text_spoiler {
++	display: none;
++}
++
++.monthselect-inner {
++	display: flex;
++	align-items: center;
++	justify-content: center;
++	gap: 3em;
++}
++
++.monthselect-title {
++	display: inline-block;
++}
++
++.dlepopupnewsedit .wseditor {
++	border-top: none;
++}
++
++.dlepopupnewsedit .tox .tox-toolbar-overlord {
++	background-color: #f7f7f7;
++}
+diff --git a/templates/Pisces/attachment.tpl b/templates/Pisces/attachment.tpl
+--- a/templates/Pisces/attachment.tpl
++++ b/templates/Pisces/attachment.tpl
+@@
+-[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count][allow-online]<br />Посмотреть онлайн файл: <a data-highslide="file" data-type="pdf" href="{online-view-link}" target="_blank">{name}</a>[/allow-online]</span>[/allow-download]
++[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count][allow-online]<br />Посмотреть онлайн файл: <a data-highslide="file" data-type="iframe" href="{online-view-link}" target="_blank">{name}</a>[/allow-online]</span>[/allow-download]
