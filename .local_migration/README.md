@@ -3152,7 +3152,98 @@ install.php удалён
 По changelog 15.2 -> 15.3 требуется адаптировать шаблонные изменения под Pisces.
 ```
 
-## 51. Операционные заметки, которые нельзя терять
+## 51. Обновление статуса: DLE 15.3 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 15.2 до DLE 15.3.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle15_3.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 15.3
+install.php: charset = utf-8
+engine/inc/upgrade/15.2.php exists
+```
+
+Официальный changelog для Default template на переходе 15.2 -> 15.3 требует добавить CSS для:
+
+```text
+.comments-image-gallery
+.mce-toc
+```
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-15.2-to-15.3.patch
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"15.3"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 15.3
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/15.3-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 15.3 UTF-8 -> DLE 16.0.
+По changelog 15.3 -> 16.0 требуется адаптировать CSS для image-bordered/image-shadows/image-padded и comments-user-profile.
+```
+
+## 52. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
