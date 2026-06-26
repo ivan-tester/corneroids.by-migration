@@ -1,0 +1,25 @@
+--- templates/Pisces/style/engine.css
++++ templates/Pisces/style/engine.css
+@@
+ .mce-toc li {
+ 	list-style-type: none;
+ }
++
++.image-bordered {
++	border: 1px solid #ddd;
++}
++
++.image-shadows {
++	box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
++}
++
++.image-padded {
++	padding: 0.5rem;
++}
++
++.comments-user-profile {
++	font-weight: bold;
++	cursor: pointer;
++	color: #3394e6;
++}
+ .uploadedfile .info {
