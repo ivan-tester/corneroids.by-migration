@@ -1192,13 +1192,13 @@ http://localhost:8081
 Текущий актуальный статус на 2026-06-27:
 
 ```text
-1. Миграция пройдена последовательно до DLE 17.2 UTF-8.
+1. Миграция пройдена последовательно до DLE 17.3 UTF-8.
 2. Активная локальная копия: .local_migration/www_utf8.
 3. Активный шаблон: templates/Pisces.
 4. Docker Engine работает внутри WSL Ubuntu.
 5. Проверенный PHP 7.4 URL: http://127.0.0.1:8075
 6. Проверенный PHP 8.2 URL: http://127.0.0.1:8083
-7. Smoke-check на DLE 17.2: PHP 7.4 и PHP 8.2 без PHP/MySQL диагностик на проверенных URL.
+7. Smoke-check на DLE 17.3: PHP 7.4 и PHP 8.2 без PHP/MySQL диагностик на проверенных URL.
 8. GitHub синхронизирован; актуальный commit проверяется через git log.
 9. Официальные архивы до DLE 20.0 доступны в /mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/.
 10. Известный визуальный дефект: отсутствует кастомный engine/modules/snippets/whoonline.php.
@@ -1209,7 +1209,7 @@ http://localhost:8081
 Следующий практический шаг:
 
 ```text
-Начать официальный upgrade DLE 17.2 UTF-8 -> DLE 17.3 UTF-8.
+Начать официальный upgrade DLE 17.3 UTF-8 -> DLE 18.0 UTF-8.
 ```
 
 ## 30. Обновление статуса от 2026-06-26
@@ -3729,9 +3729,102 @@ install.php удалён
 Перед применением проверить charset/version в официальном архиве dle17_3.zip и изменения шаблона 17.2 -> 17.3.
 ```
 
-## 58. Операционные заметки, которые нельзя терять
+## 58. Обновление статуса: DLE 17.3 UTF-8 от 2026-06-27
 
-### 58.1. Соответствие файлов шаблона Pisces и Default changelog
+Локальный UTF-8 стенд успешно обновлён с DLE 17.2 до DLE 17.3.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle17_3.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 17.3
+install.php: charset = utf-8
+engine/inc/upgrade/17.2.php exists
+```
+
+Официальный changelog для Default template на переходе 17.2 -> 17.3 требует добавить CSS для:
+
+```text
+.ui-dialog-buttonset button.ui-button-delete
+.form-check-label
+.form-check-input
+```
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-17.2-to-17.3.patch
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"17.3"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 17.3
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/17.3-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 17.3 UTF-8 -> DLE 18.0.
+Перед применением проверить charset/version в официальном архиве dle18_0.zip и изменения шаблона 17.3 -> 18.0.
+```
+
+## 59. Операционные заметки, которые нельзя терять
+
+### 59.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -3763,7 +3856,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 58.2. Personage, Drage и временные пароли
+### 59.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
@@ -3773,7 +3866,7 @@ Drage должен сохранять исходный 32-символьный M
 Personage использовать как локальный migration-admin.
 ```
 
-Текущее состояние локальной Docker-БД после upgrade до DLE 17.2:
+Текущее состояние локальной Docker-БД после upgrade до DLE 17.3:
 
 ```text
 Drage:    user_group = 1, password length = 32, prefix = b486
