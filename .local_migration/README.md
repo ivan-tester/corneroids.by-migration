@@ -1156,3 +1156,79 @@ http://localhost:8081
 ```text
 Установить Docker Desktop, включить WSL integration, запустить docker compose.
 ```
+
+## 30. Обновление статуса от 2026-06-26
+
+Docker Desktop через Windows не был установлен, потому что установка требовала интерактивного UAC, а пользователь работал с мобильного без доступа к экрану компьютера.
+
+Вместо этого Docker Engine установлен напрямую внутри WSL Ubuntu:
+
+```text
+Docker Engine: 29.1.3
+Docker Compose: 2.40.3
+Docker service: active/running через systemd
+```
+
+Локальный стенд успешно поднят командой:
+
+```bash
+cd /home/ivandechenko/dev/corneroids.by/.local_migration
+docker compose up -d --build
+```
+
+Сервисы:
+
+```text
+web74:      http://localhost:8074
+web82:      http://localhost:8082
+phpmyadmin: http://localhost:8081
+MariaDB:    localhost:3307
+```
+
+Проверка состояния:
+
+```text
+1. PHP 7.4 открывает старый сайт DLE 10.5 cp1251.
+2. Главная страница отдаёт HTTP 200.
+3. Заголовок сайта читается: "Всё для игры Corneroids!".
+4. Активный шаблон в HTML: Pisces.
+5. База импортирована: 64 таблицы.
+6. В dle_post найдено 113 новостей.
+7. phpMyAdmin открывается.
+```
+
+Для локальной рабочей копии были выставлены write-права на runtime-директории, чтобы Apache/PHP мог писать cache/data/uploads:
+
+```text
+.local_migration/www/engine/cache
+.local_migration/www/engine/data
+.local_migration/www/backup
+.local_migration/www/uploads
+.local_migration/www/upload_forum/cache
+.local_migration/www/upload_forum/logs
+.local_migration/www/upload_forum/uploads
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/10.5-cp1251-php74-ok/
+  README.txt
+  db.sql
+  www.tar.gz
+```
+
+`www.tar.gz` не включает пользовательские uploads, backup и runtime cache/logs.
+
+PHP 8.2 сейчас не является целевым runtime для старой cp1251-копии, но используется как ранний индикатор несовместимостей. После исправления прав он падает на следующей ожидаемой проблеме DLE 10.5:
+
+```text
+Fatal error: Array and string offset access syntax with curly braces is no longer supported
+/var/www/html/engine/classes/templates.class.php on line 220
+```
+
+Следующий практический шаг:
+
+```text
+Начать подготовку UTF-8-копии DLE 10.5, не трогая checkpoint 10.5-cp1251-php74-ok.
+```
