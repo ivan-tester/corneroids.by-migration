@@ -3949,16 +3949,146 @@ CSS старого Froala-редактора из `engine/editor/css/default.css
 
 `/engine/opensearch.php` на DLE 18.0 возвращает `404`, хотя на 17.3 возвращал `302`. Fatal/error diagnostics на проверенных страницах не обнаружены, но это изменение поведения нужно держать в уме при финальном QA.
 
+Статус следующего шага:
+
+```text
+DLE 18.0 UTF-8 -> DLE 18.1 выполнен, см. раздел 60.
+```
+
+## 60. Обновление статуса: DLE 18.1 UTF-8 от 2026-06-27
+
+Миграция `18.0 -> 18.1` выполнена на UTF-8 копии:
+
+```text
+.local_migration/www_utf8
+```
+
+Официальный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle18_1.zip
+```
+
+Распакованная копия:
+
+```text
+.local_migration/dle_versions/18.1/extracted
+```
+
+Проверки архива перед применением:
+
+```text
+install.php: version_id = 18.1
+install.php: charset = utf-8
+engine/inc/upgrade/18.0.php найден
+```
+
+Файлы DLE 18.1 наложены поверх активной UTF-8 копии с сохранением пользовательских данных и шаблона:
+
+```bash
+rsync -a --no-owner --no-group --omit-dir-times --delete \
+  --exclude='/templates/' --exclude='/engine/data/' --exclude='/engine/cache/' \
+  --exclude='/uploads/' --exclude='/backup/' \
+  .local_migration/dle_versions/18.1/extracted/upload/ \
+  .local_migration/www_utf8/
+```
+
+Upgrade-мастер успешно прошёл шаг `18.0 -> 18.1` под локальным migration-admin `Personage`:
+
+```text
+ajax upgrade response: {"status":"ok","version":"18.1"}
+admin upgrade check: Обновление скрипта до версии 18.1 завершено.
+```
+
+Финальное состояние:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 18.1
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/18.1-utf8-php74-ok
+```
+
+### 60.1. Изменения шаблона Pisces для DLE 18.1
+
+Официальный `templates-changelog` описывает изменения для `Default`, поэтому они адаптированы под текущий `templates/Pisces`.
+
+Сделано:
+
+```text
+templates/Pisces/style/engine.css
+- добавлены CSS-правила .quote_link и .quote_link svg.
+
+templates/Pisces/rss.tpl
+- удалена секция [turbo]...[/turbo].
+```
+
+Важно: в changelog указано удалить `[turbo]...[/turbo]` из общей папки `templates/rss.tpl`, но в текущем сайте фактический RSS-шаблон лежит в активном шаблоне:
+
+```text
+templates/Pisces/rss.tpl
+```
+
+Patch с адаптацией шаблона:
+
+```text
+.local_migration/patches/pisces-template-18.0-to-18.1.patch
+```
+
+### 60.2. Проверка после DLE 18.1
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/index.php?do=pm               200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         404 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/index.php?do=addnews          200 ok
+/index.php?do=pm               200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         404 ok
+```
+
 Следующий шаг:
 
 ```text
-Подготовить upgrade DLE 18.0 UTF-8 -> DLE 18.1.
-Перед применением проверить charset/version в официальном архиве dle18_1.zip и изменения шаблона 18.0 -> 18.1.
+Подготовить upgrade DLE 18.1 UTF-8 -> DLE 19.0.
+Перед применением проверить charset/version в официальном архиве dle19_0.zip и изменения шаблона 18.1 -> 19.0.
 ```
 
-## 60. Операционные заметки, которые нельзя терять
+## 61. Операционные заметки, которые нельзя терять
 
-### 60.1. Соответствие файлов шаблона Pisces и Default changelog
+### 61.1. Соответствие файлов шаблона Pisces и Default changelog
 
 Официальная страница `templates-changelog` описывает изменения для стандартного шаблона DLE `Default`. Имена файлов и расположение CSS нужно сопоставлять с активным шаблоном сайта.
 
@@ -3990,7 +4120,7 @@ Pisces equivalent: templates/Pisces/style/styles.css
 
 а не в несуществующий для Pisces путь `css/styles.css`.
 
-### 60.2. Personage, Drage и временные пароли
+### 61.2. Personage, Drage и временные пароли
 
 Текущее правило миграции:
 
@@ -4000,7 +4130,7 @@ Drage должен сохранять исходный 32-символьный M
 Personage использовать как локальный migration-admin.
 ```
 
-Текущее состояние локальной Docker-БД после upgrade до DLE 18.0:
+Текущее состояние локальной Docker-БД после upgrade до DLE 18.1:
 
 ```text
 Drage:    user_group = 1, password length = 32, prefix = b486
@@ -4013,7 +4143,7 @@ Personage: user_group = 1, password length = 32, prefix = dc98
 stored password = md5(md5(plain_password))
 ```
 
-Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 18.0 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
+Во время миграции для локального входа в upgrade-мастер использовался временный migration-only пароль `Personage`, заданный только в локальной Docker-БД. На текущем состоянии DLE 18.1 `Personage` хранится как 32-символьный хеш старого формата; это зафиксировано как локальное migration-only состояние и не должно переноситься на production без отдельной проверки логина.
 
 Не сохранять реальные или временные пароли в Git/README. Значение временного пароля во время текущей сессии лежало только вне репозитория:
 

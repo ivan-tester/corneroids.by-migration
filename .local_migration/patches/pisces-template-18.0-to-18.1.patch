@@ -1,0 +1,32 @@
+diff --git a/templates/Pisces/style/engine.css b/templates/Pisces/style/engine.css
+--- a/templates/Pisces/style/engine.css
++++ b/templates/Pisces/style/engine.css
+@@
+ .pm_navigation .navigation a:hover {
+ 	background-color: #e2e8f0;
+ }
++
++.quote_link {
++	float: right;
++}
++
++.quote_link svg {
++	color: #6c838e;
++	vertical-align: middle;
++}
+diff --git a/templates/Pisces/rss.tpl b/templates/Pisces/rss.tpl
+--- a/templates/Pisces/rss.tpl
++++ b/templates/Pisces/rss.tpl
+@@
+-[turbo]<item turbo="true">
+-<turbo:extendedHtml>true</turbo:extendedHtml>
+-<link>{rsslink}</link>
+-<author>{rssauthor}</author>
+-<category>{category}</category>
+-<pubDate>{rssdate}</pubDate>
+-<turbo:content><![CDATA[<header><h1>{title}</h1></header>{full-story}]]></turbo:content>
+-</item>[/turbo]
+-
+ [dzen]<item>
+ <title>{title}</title>
+ <link>{rsslink}</link>
