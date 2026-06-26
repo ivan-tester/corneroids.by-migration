@@ -2753,7 +2753,115 @@ install.php удалён
 Перед применением проверить charset/version в официальном архиве dle14_3.zip и изменения шаблона 14.2 -> 14.3.
 ```
 
-## 47. Операционные заметки, которые нельзя терять
+## 47. Обновление статуса: DLE 14.3 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 14.2 до DLE 14.3.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle14_3.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 14.3
+install.php: charset = utf-8
+engine/inc/upgrade/14.2.php exists
+```
+
+Официальный changelog для Default template на переходе 14.2 -> 14.3 требует добавить CSS подсветки исходного кода `hljs-*` в шаблонный CSS.
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-14.2-to-14.3.patch
+```
+
+Практическое правило для следующих overlay:
+
+```text
+rsync -a --no-owner --no-group --omit-dir-times --delete \
+  --exclude='/templates/' \
+  --exclude='/engine/data/' \
+  --exclude='/engine/cache/' \
+  --exclude='/uploads/' \
+  --exclude='/backup/' \
+  extracted/upload/ www_utf8/
+```
+
+После overlay нормализовать runtime-права локального стенда:
+
+```text
+directories: 755
+files: 644
+engine/cache: writable for www-data
+engine/data: writable for upgrade
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"14.3"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 14.3
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/14.3-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 14.3 UTF-8 -> следующая доступная официальная версия.
+В текущем архивном каталоге после dle14_3.zip виден dle16_1.zip; перед переходом обязательно проверить, нет ли пропущенных архивов DLE 15.x/16.0 в другом месте.
+Если DLE 15.x/16.0 отсутствуют, нельзя считать путь "по одной версии" выполненным без отдельного решения по недостающим архивам.
+```
+
+## 48. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
