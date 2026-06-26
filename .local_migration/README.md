@@ -2141,7 +2141,218 @@ Fatal error: Array and string offset access syntax with curly braces is no longe
 Перед наложением dle13_0.zip обязательно проверить, что дистрибутив в архиве имеет $distr_charset = "utf-8", так как имя архива не содержит _utf8.
 ```
 
-## 40. Операционные заметки, которые нельзя терять
+## 40. Обновление статуса: DLE 13.0 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 12.1 до DLE 13.0.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle13_0.zip
+```
+
+Важный нюанс: начиная с этой версии архив уже не имеет `_utf8` в имени, но перед применением было проверено, что `install.php` внутри официального дистрибутива содержит:
+
+```text
+$distr_charset = "utf-8"
+$version_id = "13.0"
+```
+
+Начиная с DLE 13.0 отдельного `/upgrade/` каталога в архиве нет. Штатный upgrade выполняется через админ-панель:
+
+```text
+admin.php?mod=upgrade&action=dbupgrade
+```
+
+Процесс для локального стенда:
+
+```text
+1. Наложить files from upload/ поверх .local_migration/www_utf8.
+2. Не затирать templates/, engine/data/, uploads/, backup/.
+3. Войти в admin.php под локальным migration-admin Personage.
+4. Выполнить AJAX upgrade action=dodbupgrade.
+5. Проверить dbupgradecheck.
+6. Удалить install.php.
+7. Проверить публичные страницы.
+```
+
+Результат:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 13.0
+charset = utf-8
+skin = Pisces
+```
+
+Проверка шаблонов по официальному changelog:
+
+```text
+12.1 -> 13.0: изменений в шаблонах не требуется.
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/13.0-utf8-php74-ok
+```
+
+PHP 7.4 после upgrade: главная, новости, категории, feedback, lastcomments, admin.php и RSS открывались без PHP/MySQL диагностик.
+
+PHP 8.2 после upgrade всё ещё не является целевой рабочей средой на этом этапе: главная падала в оригинальном core-файле:
+
+```text
+engine/modules/sitelogin.php
+```
+
+Core-файлы вручную не правились.
+
+## 41. Обновление статуса: DLE 13.1 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 13.0 до DLE 13.1.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle13_1.zip
+```
+
+Перед применением было проверено:
+
+```text
+$distr_charset = "utf-8"
+$version_id = "13.1"
+```
+
+Результат:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 13.1
+charset = utf-8
+skin = Pisces
+```
+
+Официальный changelog для Default template требует изменений в рейтинге и upload CSS для перехода 13.0 -> 13.1. Эти изменения адаптированы под активный шаблон `Pisces`, а не скопированы вслепую из Default.
+
+Изменённые файлы Pisces:
+
+```text
+templates/Pisces/style/engine.css
+templates/Pisces/shortstory.tpl
+templates/Pisces/fullstory.tpl
+templates/Pisces/comments.tpl
+```
+
+Что сделано:
+
+```text
+1. Обновлены CSS-правила .uploadedfile/.uploadimage и добавлен .sortable-ghost.
+2. В shortstory.tpl добавлена поддержка rating-type-4.
+3. В fullstory.tpl добавлена поддержка rating-type-4.
+4. В comments.tpl добавлена поддержка rating-type-4.
+```
+
+При адаптации рейтинга сохранена структура Pisces с существующими иконками и блоками `ratebox3`; SVG/HTML из Default template не переносился напрямую.
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-13.0-to-13.1.patch
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/13.1-utf8-php74-ok
+```
+
+PHP 7.4 после upgrade: проверенные страницы открывались без PHP/MySQL диагностик.
+
+PHP 8.2: главная всё ещё падала в оригинальном core-файле `engine/modules/sitelogin.php`; core-файлы не правились.
+
+## 42. Обновление статуса: DLE 13.2 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 13.1 до DLE 13.2.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle13_2.zip
+```
+
+Перед применением было проверено:
+
+```text
+$distr_charset = "utf-8"
+$version_id = "13.2"
+engine/inc/upgrade/13.1.php exists
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"13.2"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 13.2
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Официальный changelog:
+
+```text
+13.1 -> 13.2: изменений в шаблонах не требуется.
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/13.2-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+`sitemap.xml` отдаёт 404 без PHP/MySQL диагностик. `opensearch.php` отдаёт 302 redirect, как и на предыдущих шагах.
+
+Проверка PHP 8.2:
+
+```text
+/                              200 PHP_TEXT
+Fatal error: Array and string offset access syntax with curly braces is no longer supported in /var/www/html/engine/modules/sitelogin.php on line 159
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Это ошибка в оригинальном core-файле DLE 13.2, вручную не исправлялась. Ожидаем, что она исчезнет в одной из следующих официальных версий.
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 13.2 UTF-8 -> DLE 13.3.
+Перед применением проверить charset/version в официальном архиве dle13_3.zip и изменения шаблона 13.2 -> 13.3.
+```
+
+## 43. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
