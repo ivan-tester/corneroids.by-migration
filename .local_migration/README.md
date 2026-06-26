@@ -3336,7 +3336,97 @@ install.php удалён
 По changelog 16.0 -> 16.1 требуется адаптировать CSS для .title_spoiler svg.
 ```
 
-## 53. Операционные заметки, которые нельзя терять
+## 53. Обновление статуса: DLE 16.1 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 16.0 до DLE 16.1.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle16_1.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 16.1
+install.php: charset = utf-8
+engine/inc/upgrade/16.0.php exists
+```
+
+Официальный changelog для Default template на переходе 16.0 -> 16.1 требует добавить CSS для:
+
+```text
+.title_spoiler svg
+```
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-16.0-to-16.1.patch
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"16.1"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 16.1
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/16.1-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 ok
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 16.1 UTF-8 -> DLE 17.0.
+Перед применением проверить charset/version в официальном архиве dle17_0.zip и изменения шаблона 16.1 -> 17.0.
+```
+
+## 54. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
