@@ -2352,7 +2352,101 @@ Fatal error: Array and string offset access syntax with curly braces is no longe
 Перед применением проверить charset/version в официальном архиве dle13_3.zip и изменения шаблона 13.2 -> 13.3.
 ```
 
-## 43. Операционные заметки, которые нельзя терять
+## 43. Обновление статуса: DLE 13.3 UTF-8 от 2026-06-26
+
+Локальный UTF-8 стенд успешно обновлён с DLE 13.2 до DLE 13.3.
+
+Использованный архив:
+
+```text
+/mnt/z/Ванина папка/1САЙТ/Движки/DLE/ЛИЦЕНЗИЯ/dle13_3.zip
+```
+
+Перед применением было проверено:
+
+```text
+install.php: version_id = 13.3
+install.php: charset = utf-8
+engine/inc/upgrade/13.2.php exists
+```
+
+Upgrade выполнен штатно через `admin.php?mod=upgrade&action=dbupgrade` под локальным migration-admin `Personage`.
+
+Результат AJAX upgrade:
+
+```json
+{"status": "ok", "version":"13.3"}
+```
+
+После upgrade:
+
+```text
+.local_migration/www_utf8/engine/data/config.php: version_id = 13.3
+charset = utf-8
+skin = Pisces
+install.php удалён
+```
+
+Официальный changelog для Default template на переходе 13.2 -> 13.3 требует добавить в `css/engine.css`:
+
+```css
+.ui-front { z-index: 1000; }
+.ui-button-icon-only { overflow: hidden; text-indent: -9999px; }
+```
+
+Для активного шаблона `Pisces` это адаптировано в:
+
+```text
+templates/Pisces/style/engine.css
+```
+
+Patch-файл адаптации:
+
+```text
+.local_migration/patches/pisces-template-13.2-to-13.3.patch
+```
+
+Создан локальный checkpoint:
+
+```text
+.local_migration/checkpoints/13.3-utf8-php74-ok
+```
+
+Проверка PHP 7.4:
+
+```text
+/                              200 ok
+/index.php                     200 ok
+/6-ustanovka.html              200 ok
+/news/                         200 ok
+/plugins/                      200 ok
+/index.php?do=feedback         200 ok
+/index.php?do=lastcomments     200 ok
+/admin.php                     200 ok
+/rss.xml                       200 ok
+/sitemap.xml                   404 ok
+/engine/opensearch.php         302 ok
+```
+
+Проверка PHP 8.2:
+
+```text
+/                              200 PHP_TEXT
+Fatal error: Array and string offset access syntax with curly braces is no longer supported in /var/www/html/engine/modules/sitelogin.php on line 159
+/rss.xml                       200 ok
+/engine/opensearch.php         302 ok
+```
+
+Core-файл `engine/modules/sitelogin.php` не исправлялся вручную.
+
+Следующий шаг:
+
+```text
+Подготовить upgrade DLE 13.3 UTF-8 -> DLE 14.0.
+Перед применением проверить charset/version в официальном архиве dle14_0.zip и изменения шаблона 13.3 -> 14.0.
+```
+
+## 44. Операционные заметки, которые нельзя терять
 
 ### 40.1. Соответствие файлов шаблона Pisces и Default changelog
 
