@@ -1,0 +1,49 @@
+diff --git a/templates/Pisces/style/engine.css b/templates/Pisces/style/engine.css
+--- a/templates/Pisces/style/engine.css
++++ b/templates/Pisces/style/engine.css
+@@
+ .clipboard-copy-link svg {
+ 	color: #6c838e;
+ 	vertical-align: middle;
+ 	margin-top: -3px;
+ }
++
++.smart-captcha {
++	display: inline-block;
++}
++
++.mathml-container {
++	font-family: math;
++}
++
++div.mathml-block {
++	font-size: 1.1em;
++	display: flex;
++	align-items: center;
++	justify-content: center;
++	padding: .139em .35em;
++}
++
++div.mathml-block .katex {
++	font-size: 1.1em;
++}
++
++span.mathml-inline {
++	display: inline-block;
++	vertical-align: middle;
++	margin: 0 .12em;
++}
++
++.dleshowhidden {
++	color: #104d92;
++	background-color: #E3F2FD;
++	border: 1px solid #1E88E5;
++	box-shadow: 0 5px 12px rgba(126, 142, 177, 0.2);
++	padding: .83em;
++}
+diff --git a/templates/Pisces/attachment.tpl b/templates/Pisces/attachment.tpl
+--- a/templates/Pisces/attachment.tpl
++++ b/templates/Pisces/attachment.tpl
+@@
+-[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count][allow-online]<br />Посмотреть онлайн файл: <a href="{online-view-link}" target="_blank">{name}</a>[/allow-online]</span>[/allow-download]
++[allow-download]<span class="attachment"><a href="{link}" >{name}</a> [count] [{size}] (cкачиваний: {count})[/count][allow-online]<br />Посмотреть онлайн файл: <a data-highslide="file" data-type="pdf" href="{online-view-link}" target="_blank">{name}</a>[/allow-online]</span>[/allow-download]
