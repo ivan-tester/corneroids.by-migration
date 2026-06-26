@@ -1,0 +1,48 @@
+--- templates/Pisces/style/engine.css
++++ templates/Pisces/style/engine.css
+@@
+ .title_spoiler svg {
+ 	vertical-align: middle;
+ 	margin-top: -4px;
+ 	margin-right: 7px;
+ 	height: 16px;
+ 	width: 16px;
+ }
++
++.mce-accordion summary {
++	cursor: pointer;
++}
++
++.self_delete_link {
++	border: 0 none;
++	display: inline-block;
++	vertical-align: middle;
++	cursor: pointer;
++	padding: 12px 27px;
++	border-radius: 10px;
++	outline: none;
++	background-color: #f44336;
++	color: #fff;
++	text-shadow: 0 1px #333;
++	text-decoration: none !important;
++	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
++	box-sizing: border-box;
++	transition: all ease .1s;
++}
+ .uploadedfile .info {
+--- templates/Pisces/userinfo.tpl
++++ templates/Pisces/userinfo.tpl
+@@
+ 					<tr>
+ 						<td class="label">Подписки:</td>
+ 						<td>
+ 							<div class="checkbox">{news-subscribe}</div>
+ 							<div class="checkbox">{comments-reply-subscribe}</div>
+ 							<div class="checkbox">{unsubscribe}</div>
+ 						</td>
+ 					</tr>
++					<tr>
++						<td class="label">Удаление аккаунта:</td>
++						<td>[delete]Удалить аккаунт[/delete]</td>
++					</tr>
+ 				</table>
